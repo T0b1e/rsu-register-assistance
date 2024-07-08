@@ -1,27 +1,19 @@
-
-# Web
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.edge.service import Service as EdgeService
 from webdriver_manager.microsoft import EdgeChromiumDriverManager
-
-from msedge.selenium_tools import EdgeOptions
-
-# Google
-import gspread
-from google.oauth2.service_account import Credentials
-
-# import time
 import time as time_module
 
-# https://service.rsu.ac.th/GetIntranet/LoginAuthenPages.aspx
-
 def get_data():
-    # Set up the Edge WebDriver
-    service = EdgeService(EdgeChromiumDriverManager().install())
-    browser = webdriver.Edge(service=service)
+    # Set up the Edge WebDriver with options
+    options = webdriver.EdgeOptions()
+    options.use_chromium = True  # Use the Chromium version of Edge
+    options.add_argument("--disable-gpu")  # Disable GPU acceleration (optional)
+    options.add_argument("--no-sandbox")  # Bypass OS security model (optional)
+    options.add_argument("--headless")  # Run in headless mode (optional)
+
+    browser = webdriver.Edge(service=webdriver.EdgeService(EdgeChromiumDriverManager().install()), options=options)
 
     # Open the target URL
     browser.get('https://service.rsu.ac.th/GetIntranet/LoginAuthenPages.aspx')
@@ -91,36 +83,15 @@ def get_data():
         # Loop through each row and extract data
         for row in rows:
             columns = row.find_elements(By.TAG_NAME, 'td')
-            # subject_code = columns[0].text
-            # theory = columns[1].text
             capacity = columns[2].text
             reserved = columns[3].text
             confirmed = columns[4].text
             total = columns[5].text
-            # day = columns[6].text
-            # time = columns[7].text
-            # room = columns[8].text
-            # note = columns[9].text
 
             capacity_output.append(capacity)
             reserved_output.append(reserved)
             confirmed_output.append(confirmed)
             total_output.append(total)
-
-            '''
-            # Print the extracted data
-            print(f"Subject Code: {subject_code}")
-            print(f"Theory: {theory}")
-            print(f"Capacity: {capacity}")
-            print(f"Reserved: {reserved}")
-            print(f"Confirmed: {confirmed}")
-            print(f"Total: {total}")
-            print(f"Day: {day}")
-            print(f"Time: {time}")
-            print(f"Room: {room}")
-            print(f"Note: {note}")
-            print("------------------------")
-            '''
 
         time_module.sleep(2)  # Wait a bit before searching for the next subject code
 
@@ -159,20 +130,20 @@ def get_data():
         total_output.append(columns[5].text)
 
     # Close the browser
-
     browser.quit()
 
-    print(capacity_output)
-    print(reserved_output)
-    print(confirmed_output)
-    print(total_output)
+    # print(capacity_output)
+    # print(reserved_output)
+    # print(confirmed_output)
+    # print(total_output)
 
+    print('Finishing Data Mining')
     return [capacity_output, reserved_output, confirmed_output, total_output]
 
 
 def connect_google_sheet(capacity, reserved, confirmed, total):
-
-    # API_KEYS = AIzaSyAqSTgowpBwcAjBIdMMnyXAyfakatPJ60Y
+    import gspread
+    from google.oauth2.service_account import Credentials
 
     # Define the scope
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -183,8 +154,6 @@ def connect_google_sheet(capacity, reserved, confirmed, total):
     # Authorize the client
     gc = gspread.authorize(credentials)
 
-    # Connect Sheet
-
     # Open a worksheet from a spreadsheet using the URL
     spreadsheet_url = "https://docs.google.com/spreadsheets/d/1yleU7Z0U4QLq1cSqkzDsI3XwhYSSSuGnhNr70jLg5Aw/edit#gid=0"
     spreadsheet = gc.open_by_url(spreadsheet_url)
@@ -192,67 +161,30 @@ def connect_google_sheet(capacity, reserved, confirmed, total):
 
     # Validation of data lengths
     if len(capacity) == len(reserved) == len(confirmed) == len(total):
-        # Update capacity
-
         print('Start Writing')
-
-        # for i, value in enumerate(capacity, start=2):  # Starting from row 2
-        #    worksheet.update_cell(i, 10, value)  # Column J is 11th column
 
         # Update reserved
         for i, value in enumerate(reserved, start=2):
-            worksheet.update_cell(i, 11, value)  # Column K is 12th column
+            worksheet.update_cell(i, 11, value)  # Column K is 11th column
 
         # Update confirmed
         for i, value in enumerate(confirmed, start=2):
-            worksheet.update_cell(i, 12, value)  # Column L is 13th column
+            worksheet.update_cell(i, 12, value)  # Column L is 12th column
 
         # Update total
         for i, value in enumerate(total, start=2):
-            worksheet.update_cell(i, 13, value)  # Column M is 14th column
+            worksheet.update_cell(i, 13, value)  # Column M is 13th column
 
-        print('Done')
+        print('Done Writing')
     else:
         print("Data length mismatch among capacity, reserved, confirmed, and total")
 
 
 data = get_data()
 
-# Meta Data
-# data = [
-#    ['50', '50', '50', '50', '50', '50', '50', '50', '50', '50', '55', '55', '17', '17', '17', '17', '17'],
-#    ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'],
-#    ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'],
-#    ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'],
-#]
-
-# Example data
 capacity = data[0]
 reserved = data[1]
 confirmed = data[2]
 total = data[3]
 
-# Call the function
 connect_google_sheet(capacity, reserved, confirmed, total)
-
-
-'''
-Searching for subject code: CPE432
-
-Searching for subject code: CPE361
-
-Searching for subject code: CPE308
-
-Searching for subject code: CPE332
-
-Searching for subject code: CPE326
-
-Searching for subject code: IEN301
-
-Searching for additional subject code: CPE327
-
-['50', '50', '50', '50', '50', '50', '50', '50', '50', '50', '55', '55', '17', '17', '17', '17', '17']
-['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
-['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
-['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
-'''
