@@ -9,12 +9,14 @@ import time
 import threading
 import gspread
 from google.oauth2.service_account import Credentials
+import webbrowser
 
 class EnrollmentApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Enrollment Assistance")
-        self.root.geometry("800x650")
+        self.root.geometry("800x680")
+        self.stop_flag = threading.Event()
         self.create_widgets()
     
     def create_widgets(self):
@@ -43,6 +45,9 @@ class EnrollmentApp:
         self.start_button = ttk.Button(control_frame, text="Start", command=self.start_process)
         self.start_button.pack(side=tk.LEFT, padx=(0, 10))
 
+        self.stop_button = ttk.Button(control_frame, text="Stop", command=self.stop_process, state=tk.DISABLED)
+        self.stop_button.pack(side=tk.LEFT, padx=(0, 10))
+
         self.headless_var = tk.BooleanVar(value=True)
         self.headless_checkbox = ttk.Checkbutton(control_frame, text="Headless", variable=self.headless_var)
         self.headless_checkbox.pack(side=tk.LEFT)
@@ -52,32 +57,52 @@ class EnrollmentApp:
 
         self.log_area = scrolledtext.ScrolledText(main_frame, width=80, height=20)
         self.log_area.pack(fill=tk.BOTH, expand=True)
+
+        footer_frame = ttk.Frame(main_frame)
+        footer_frame.pack(fill=tk.X, pady=(20, 0))
+        
+        url = "https://service.rsu.ac.th/GetIntranet/LoginAuthenPages.aspx"
+        url_label = ttk.Label(footer_frame, text=url, foreground="blue", cursor="hand2")
+        url_label.pack()
+        url_label.bind("<Button-1>", lambda e: webbrowser.open_new(url))
     
     def log(self, message):
-        self.log_area.insert(tk.END, message + "\n")
+        self.log_area.insert(tk.END, f"{time.strftime('%Y-%m-%d %H:%M:%S')} - {message}\n")
         self.log_area.see(tk.END)
     
     def start_process(self):
         self.log_area.delete(1.0, tk.END)
         self.start_button.config(state=tk.DISABLED)
+        self.stop_button.config(state=tk.NORMAL)
         self.progress.start()
+        self.stop_flag.clear()
+        self.log("Process started")
         threading.Thread(target=self.run, daemon=True).start()
+    
+    def stop_process(self):
+        self.log("Stopping process...")
+        self.stop_flag.set()
     
     def run(self):
         try:
             headless = self.headless_var.get()
             username = self.username_var.get()
             password = self.password_var.get()
+            self.log(f"Running with headless mode: {'On' if headless else 'Off'}")
             data = self.get_data(headless, username, password)
-            if data:
+            if data and not self.stop_flag.is_set():
                 capacity, reserved, confirmed, total = data
                 self.connect_google_sheet(capacity, reserved, confirmed, total)
+        except Exception as e:
+            self.log(f"An error occurred: {str(e)}")
         finally:
             self.root.after(0, self.finish_process)
 
     def finish_process(self):
         self.progress.stop()
         self.start_button.config(state=tk.NORMAL)
+        self.stop_button.config(state=tk.DISABLED)
+        self.log("Process finished")
     
     def get_data(self, headless, username, password):
         self.log("Starting data extraction...")
@@ -92,10 +117,11 @@ class EnrollmentApp:
         browser = webdriver.Edge(service=webdriver.EdgeService(EdgeChromiumDriverManager().install()), options=options)
 
         try:
-            self.log("Direct to Login Page")
+            self.log("Navigating to login page...")
             browser.get('https://service.rsu.ac.th/GetIntranet/LoginAuthenPages.aspx')
             time.sleep(2)
 
+            self.log("Entering login credentials...")
             username_input = browser.find_element(By.ID, 'txtUsername')
             username_input.send_keys(username)
 
@@ -105,17 +131,18 @@ class EnrollmentApp:
             login_button = browser.find_element(By.ID, 'Button1')
             login_button.click()
 
+            self.log("Waiting for login to complete...")
             WebDriverWait(browser, 10).until(EC.url_to_be('https://service.rsu.ac.th/GetIntranet/Default.aspx'))
 
+            self.log("Navigating to enrollment page...")
             desired_link = WebDriverWait(browser, 10).until(
                 EC.presence_of_element_located((By.LINK_TEXT, 'จำนวนนักศึกษาที่ลงทะเบียนแยกตามรายวิชาที่เปิดสอน'))
             )
             desired_link.click()
 
-            self.log("Redirect to student seat per subject page")
-            
             WebDriverWait(browser, 10).until(EC.url_to_be('https://service.rsu.ac.th/GetIntranet/StudentSeatPerSubject.aspx'))
 
+            self.log("Setting academic year...")
             academic_year_input = browser.find_element(By.ID, 'ContentPlaceHolder1_txtAcademicYear')
             academic_year_input.clear()
             academic_year_input.send_keys('2567')
@@ -125,6 +152,10 @@ class EnrollmentApp:
             capacity_output, reserved_output, confirmed_output, total_output = [], [], [], []
 
             for subject_code in subject_codes:
+                if self.stop_flag.is_set():
+                    self.log("Process stopped by user")
+                    return None
+                
                 self.log(f"Searching for subject code: {subject_code}")
                 subject_code_input = browser.find_element(By.ID, 'ContentPlaceHolder1_txtSubjCode')
                 subject_code_input.clear()
@@ -181,14 +212,16 @@ class EnrollmentApp:
             browser.quit()
 
         self.log("Data extraction complete.")
-        self.log(f"Capacity: {capacity_output}")
-        self.log(f"Reserved: {reserved_output}")
-        self.log(f"Confirmed: {confirmed_output}")
-        self.log(f"Total: {total_output}")
-
+        '''
+            self.log(f"Capacity: {capacity_output}")
+            self.log(f"Reserved: {reserved_output}")
+            self.log(f"Confirmed: {confirmed_output}")
+            self.log(f"Total: {total_output}")
+        '''
         return [capacity_output, reserved_output, confirmed_output, total_output]
 
     def connect_google_sheet(self, capacity, reserved, confirmed, total):
+        self.log("Connecting to Google Sheet...")
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
         credentials = Credentials.from_service_account_file("rsu-enroll-assistance-79177bd9b5df.json", scopes=scope)
         gc = gspread.authorize(credentials)
@@ -197,7 +230,7 @@ class EnrollmentApp:
         worksheet = spreadsheet.sheet1
 
         if len(capacity) == len(reserved) == len(confirmed) == len(total):
-            self.log("Start Writing to Google Sheet...")
+            self.log("Start writing to Google Sheet...")
 
             data = list(zip(reserved, confirmed, total))
             cell_list = worksheet.range('K2:M' + str(len(data) + 1))
@@ -216,3 +249,6 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = EnrollmentApp(root)
     root.mainloop()
+
+# TODO
+# Adding Cache only added cell changed
