@@ -1,114 +1,115 @@
-const { Builder, By, until } = require('selenium-webdriver');
-const edge = require('selenium-webdriver/edge');
-const { ServiceBuilder } = require('selenium-webdriver/edge');
-const webdriverManager = require('webdriver-manager');
-
-(async function getData() {
-    const service = new ServiceBuilder(webdriverManager.EdgeDriver().install().location).build();
-    const driver = new Builder()
-        .forBrowser('MicrosoftEdge')
-        .setEdgeService(service)
-        .build();
-
-    try {
-        // Open the target URL
-        await driver.get('https://service.rsu.ac.th/GetIntranet/LoginAuthenPages.aspx');
-
-        // Allow the page to load
-        await driver.sleep(2000);  // Adjust the sleep time as needed
-
-        // Find the username input field and enter the username
-        const usernameInput = await driver.findElement(By.id('txtUsername'));
-        await usernameInput.sendKeys('u6505065');
-
-        // Find the password input field and enter the password
-        const passwordInput = await driver.findElement(By.id('txtPassword'));
-        await passwordInput.sendKeys('.Na592600');
-
-        // Find the login button and click it
-        const loginButton = await driver.findElement(By.id('Button1'));
-        await loginButton.click();
-
-        // Wait for the next page to load
-        await driver.wait(until.urlIs('https://service.rsu.ac.th/GetIntranet/Default.aspx'), 10000);
-
-        // Find and click the desired link
-        const desiredLink = await driver.wait(
-            until.elementLocated(By.linkText('จำนวนนักศึกษาที่ลงทะเบียนแยกตามรายวิชาที่เปิดสอน')),
-            10000
-        );
-        await desiredLink.click();
-
-        // Wait for the new page to load
-        await driver.wait(until.urlIs('https://service.rsu.ac.th/GetIntranet/StudentSeatPerSubject.aspx'), 10000);
-
-        // Enter academic year
-        const academicYearInput = await driver.findElement(By.id('ContentPlaceHolder1_txtAcademicYear'));
-        await academicYearInput.clear();
-        await academicYearInput.sendKeys('2567');
-
-        // List of subject codes to search
-        const subjectCodes = ['CPE432', 'CPE361', 'CPE308', 'CPE332', 'CPE326', 'IEN301'];
-
-        const capacityOutput = [];
-        const reservedOutput = [];
-        const confirmedOutput = [];
-        const totalOutput = [];
-
-        for (let subjectCode of subjectCodes) {
-            console.log(`\nSearching for subject code: ${subjectCode}`);
-
-            // Enter subject code
-            const subjectCodeInput = await driver.findElement(By.id('ContentPlaceHolder1_txtSubjCode'));
-            await subjectCodeInput.clear();
-            await subjectCodeInput.sendKeys(subjectCode);
-
-            // Click the submit button
-            const submitButton = await driver.findElement(By.id('ContentPlaceHolder1_Button2'));
-            await submitButton.click();
-
-            // Wait for the table to load
-            try {
-                await driver.wait(until.elementLocated(By.id('ContentPlaceHolder1_GridView1')), 10000);
-            } catch (error) {
-                console.log(`No data found for subject code: ${subjectCode}`);
-                continue;
-            }
-
-            // Find all rows in the table
-            const rows = await driver.findElements(By.xpath("//table[@id='ContentPlaceHolder1_GridView1']/tbody/tr[position()>1]"));
-
-            // Loop through each row and extract data
-            for (let row of rows) {
-                const columns = await row.findElements(By.tagName('td'));
-                const subjectCode = await columns[0].getText();
-                const theory = await columns[1].getText();
-                const capacity = await columns[2].getText();
-                const reserved = await columns[3].getText();
-                const confirmed = await columns[4].getText();
-                const total = await columns[5].getText();
-                const day = await columns[6].getText();
-                const time = await columns[7].getText();
-                const room = await columns[8].getText();
-                const note = await columns[9].getText();
-
-                capacityOutput.push(capacity);
-                reservedOutput.push(reserved);
-                confirmedOutput.push(confirmed);
-                totalOutput.push(total);
-            }
-
-            await driver.sleep(2000);  // Wait a bit before searching for the next subject code
-
-            console.log(capacityOutput);
-            console.log(reservedOutput);
-            console.log(confirmedOutput);
-            console.log(totalOutput);
+const data = {
+    "courses": [
+        {
+            "name": "COMPUTER ORGANIZATION AND ARCHITECTURE",
+            "code": "CPE432",
+            "schedule": [
+                { "sec": "1", "day": "อังคาร", "time": "12:00 - 14:50" },
+                { "sec": "2", "day": "พฤหัส", "time": "12:00 - 14:50" }
+            ],
+            "type": "ทฤษฎี",
+            "credits": 3
+        },
+        {
+            "name": "FUNDAMENTAL OF DATABASE SYSTEMS",
+            "code": "CPE361",
+            "schedule": [
+                { "sec": "1", "day": "อังคาร", "time": "15:00 - 17:50" },
+                { "sec": "2", "day": "ศุกร์", "time": "12:00 - 14:50" }
+            ],
+            "type": "ทฤษฎี",
+            "credits": 3
+        },
+        {
+            "name": "SIGNALS AND SYSTEMS",
+            "code": "CPE308",
+            "schedule": [
+                { "sec": "1", "day": "พุธ", "time": "09:00 - 11:50" },
+                { "sec": "2", "day": "ศุกร์", "time": "12:00 - 14:50" }
+            ],
+            "type": "ทฤษฎี",
+            "credits": 3
+        },
+        {
+            "name": "COMPUTER ENGINEERING MATHEMATICS II",
+            "code": "CPE332",
+            "schedule": [
+                { "sec": "1", "day": "จันทร์", "time": "12:00 - 14:50" },
+                { "sec": "2", "day": "อังคาร", "time": "09:00 - 11:50" }
+            ],
+            "type": "ทฤษฎี",
+            "credits": 3
+        },
+        {
+            "name": "DATA COMMUNICATION AND DATA NETWORKS",
+            "code": "CPE326",
+            "schedule": [
+                { "sec": "1", "day": "พุธ", "time": "15:00 - 17:50" },
+                { "sec": "2", "day": "พฤหัส", "time": "15:00 - 17:50" }
+            ],
+            "type": "ทฤษฎี",
+            "credits": 3
+        },
+        {
+            "name": "ENGINEERING MANAGEMENT",
+            "code": "IEN301",
+            "schedule": [
+                { "sec": "1", "day": "อังคาร", "time": "09:00 - 11:50" },
+                { "sec": "2", "day": "อังคาร", "time": "12:00 - 14:50" }
+            ],
+            "type": "ปฎิบัติ",
+            "credits": 3
+        },
+        {
+            "name": "DATA COMMUNICATION LABORATORY",
+            "code": "CPE327",
+            "schedule": [
+                { "sec": "11", "day": "พุธ", "time": "09:00 - 11:51" },
+                { "sec": "12", "day": "พุธ", "time": "12:00 - 14:51" },
+                { "sec": "13", "day": "พฤหัส", "time": "09:00 - 11:52" },
+                { "sec": "14", "day": "จันทร์", "time": "15:00 - 17:50" },
+                { "sec": "15", "day": "พฤหัส", "time": "16:00 - 18:50" }
+            ],
+            "type": "ทฤษฎี",
+            "credits": 1
         }
-    } finally {
-        // Close the browser
-        await driver.quit();
-    }
-})();
+    ]
+};
 
+const tableBody = document.querySelector('#courseTable tbody');
 
+data.courses.forEach(course => {
+    course.schedule.forEach(schedule => {
+        const row = document.createElement('tr');
+        
+        const nameCell = document.createElement('td');
+        nameCell.textContent = course.name;
+        row.appendChild(nameCell);
+
+        const codeCell = document.createElement('td');
+        codeCell.textContent = course.code;
+        row.appendChild(codeCell);
+
+        const secCell = document.createElement('td');
+        secCell.textContent = schedule.sec;
+        row.appendChild(secCell);
+
+        const dayCell = document.createElement('td');
+        dayCell.textContent = schedule.day;
+        row.appendChild(dayCell);
+
+        const timeCell = document.createElement('td');
+        timeCell.textContent = schedule.time;
+        row.appendChild(timeCell);
+
+        const typeCell = document.createElement('td');
+        typeCell.textContent = course.type;
+        row.appendChild(typeCell);
+
+        const creditsCell = document.createElement('td');
+        creditsCell.textContent = course.credits;
+        row.appendChild(creditsCell);
+
+        tableBody.appendChild(row);
+    });
+});
