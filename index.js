@@ -82,7 +82,7 @@ const days = ["วันจันทร์", "วันอังคาร", "พ
 const numRowsPerDay = 2;
 
 // Object to track selected courses
-const selectedCourses = {};
+let selectedCourses = {};
 
 function createCourseTable() {
     data.courses.forEach(course => {
@@ -176,35 +176,34 @@ function createNewTable() {
 }
 
 function handleCheckboxChange(course, schedule, checkbox) {
-  const courseKey = `${course.code}-${schedule.sec}`;
+    const courseKey = `${course.code}-${schedule.sec}`;
   
-  if (checkbox.checked) {
-    // Uncheck any previously selected section for this course
-    if (selectedCourses[course.code]) {
-        const prevCheckbox = document.querySelector(`input[type="checkbox"][data-course="${course.code}"][data-section="${selectedCourses[course.code].section}"]`);
-        if (prevCheckbox) prevCheckbox.checked = false;
-        removeCourseFromNewTable(course, selectedCourses[course.code].schedule);
+    if (checkbox.checked) {
+      // Uncheck any previously selected section for this course
+      if (selectedCourses[course.code]) {
+          const prevCheckbox = document.querySelector(`input[type="checkbox"][data-course="${course.code}"][data-section="${selectedCourses[course.code].section}"]`);
+          if (prevCheckbox) prevCheckbox.checked = false;
+          removeCourseFromNewTable(course, selectedCourses[course.code].schedule);
+      } else {
+          // Only increment if it's a new course, not just a different section
+          selectedSubjectsCount++;
+      }
+  
+      selectedCourses[course.code] = { section: schedule.sec, schedule: schedule };
+      addCourseToNewTable(course, schedule);
     } else {
-        // Only increment if it's a new course, not just a different section
-        selectedSubjectsCount++;
+        delete selectedCourses[course.code];
+        removeCourseFromNewTable(course, schedule);
+        selectedSubjectsCount--;
     }
-    
-    selectedCourses[course.code] = { section: schedule.sec, schedule: schedule };
-    addCourseToNewTable(course, schedule);
-  } else {
-      delete selectedCourses[course.code];
-      removeCourseFromNewTable(course, schedule);
-      selectedSubjectsCount--;
-  }
-
-    
+  
     // Set data attributes for easy selection later
     checkbox.setAttribute('data-course', course.code);
     checkbox.setAttribute('data-section', schedule.sec);
-
+  
     updateSubjectCounter();
-
-}
+  }
+  
 
 
 function addCourseToNewTable(course, schedule) {
@@ -241,14 +240,15 @@ function addCourseToNewTable(course, schedule) {
   }
 
   if (timeCell && !timeCell.textContent && codeCell && !codeCell.textContent) {
+    
       timeCell.textContent = schedule.time;
       codeCell.textContent = course.code;
   } else {
-      console.warn(`Time overlap detected for ${course.name} on ${schedule.day} at ${schedule.time}`);
+      console.warn(`Time overlap detected for ${codeCell.textContent} on ${schedule.day} at ${schedule.time}`);
 
       // Show overlap warning
       const warningDiv = document.createElement('div');
-      warningDiv.textContent = `Time overlap detected for ${course.code} at ${schedule.time}`;
+      warningDiv.textContent = `Time overlap detected for ${codeCell.textContent} on ${schedule.day} at ${schedule.time}`;
       warningDiv.classList.add('overlap-warning');
 
       document.body.appendChild(warningDiv);
@@ -285,9 +285,173 @@ function removeCourseFromNewTable(course, schedule) {
   }
 }
 
+
+// Filter Logic
+
+const searchInput = document.getElementById('searchInput');
+
+searchInput.addEventListener('input', function() {
+    const searchQuery = searchInput.value.toLowerCase();
+
+    document.querySelectorAll('.subject-row').forEach(row => {
+        const nameCell = row.querySelector('td:nth-child(2)');
+        const codeCell = row.querySelector('td:nth-child(3)');
+
+        if (nameCell && codeCell) {
+            const name = nameCell.textContent.toLowerCase();
+            const code = codeCell.textContent.toLowerCase();
+
+            const matchesSearch = !searchQuery || name.startsWith(searchQuery) || code.startsWith(searchQuery);
+
+            if (matchesSearch) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+});
+
+
+// Save and load plans
+
+let currentPlan = "plan-1";
+let plans = {
+    "plan-1": { courses: {}, checkboxes: {} },
+    "plan-2": { courses: {}, checkboxes: {} },
+    "plan-3": { courses: {}, checkboxes: {} }
+};
+
+const planSelection = document.getElementById('planSelection');
+const savePlanButton = document.getElementById('savePlanButton');
+
+planSelection.addEventListener('change', handlePlanChange);
+savePlanButton.addEventListener('click', saveCurrentPlan);
+
+function handlePlanChange() {
+    const selectedPlan = planSelection.value;
+    if (selectedPlan === 'new-plan') {
+        const newPlanName = prompt('Enter the name of the new plan:');
+        if (newPlanName) {
+            plans[newPlanName] = { courses: {}, checkboxes: {} };
+            const newOption = document.createElement('option');
+            newOption.value = newPlanName;
+            newOption.textContent = newPlanName;
+            planSelection.insertBefore(newOption, planSelection.querySelector('option[value="new-plan"]'));
+            planSelection.value = newPlanName;
+            currentPlan = newPlanName;
+        }
+    } else {
+        currentPlan = selectedPlan;
+        loadPlan(currentPlan);
+    }
+}
+
+function saveCurrentPlan() {
+    const savedSelectedCourses = {};
+    document.querySelectorAll('.subject-row input[type="checkbox"]').forEach(checkbox => {
+        if (checkbox.checked) {
+            const courseCode = checkbox.getAttribute('data-course');
+            const section = checkbox.getAttribute('data-section');
+            savedSelectedCourses[courseCode] = section;
+        }
+    });
+    plans[currentPlan] = {
+        courses: JSON.parse(JSON.stringify(selectedCourses)),
+        checkboxes: savedSelectedCourses
+    };
+    savePlansToLocalStorage();
+    alert(`Plan "${currentPlan}" saved successfully!`);
+}
+
+function loadPlan(plan) {
+    // Clear current selections
+    Object.keys(selectedCourses).forEach(code => {
+        const schedule = selectedCourses[code].schedule;
+        removeCourseFromNewTable(data.courses.find(course => course.code === code), schedule);
+    });
+
+    const planData = plans[plan] || { courses: {}, checkboxes: {} }; // Ensure planData is always an object
+    selectedCourses = JSON.parse(JSON.stringify(planData.courses || {})); // Ensure courses is always an object
+    selectedSubjectsCount = Object.keys(selectedCourses).length;
+    updateSubjectCounter();
+
+    // Clear all checkboxes first
+    document.querySelectorAll('.subject-row input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+
+    // Restore checkboxes
+    if (planData.checkboxes) {
+        Object.keys(planData.checkboxes).forEach(courseCode => {
+            const section = planData.checkboxes[courseCode];
+            const checkbox = document.querySelector(`input[type="checkbox"][data-course="${courseCode}"][data-section="${section}"]`);
+            if (checkbox) {
+                checkbox.checked = true;
+            }
+        });
+    }
+
+    Object.keys(selectedCourses).forEach(code => {
+        const course = data.courses.find(course => course.code === code);
+        const schedule = selectedCourses[code].schedule;
+        addCourseToNewTable(course, schedule);
+    });
+}
+
+
+function savePlansToLocalStorage() {
+    localStorage.setItem('plans', JSON.stringify(plans));
+}
+
+function loadPlansFromLocalStorage() {
+    const storedPlans = localStorage.getItem('plans');
+    if (storedPlans) {
+        try {
+            const parsedPlans = JSON.parse(storedPlans);
+            Object.assign(plans, parsedPlans);
+            // Populate plan selection dropdown with saved plans
+            Object.keys(plans).forEach(planName => {
+                if (!document.querySelector(`#planSelection option[value="${planName}"]`)) {
+                    const newOption = document.createElement('option');
+                    newOption.value = planName;
+                    newOption.textContent = planName;
+                    planSelection.appendChild(newOption);
+                }
+            });
+        } catch (e) {
+            console.error('Error parsing saved plans:', e);
+        }
+    } else {
+        savePlansToLocalStorage(); // Save default plans if no plans found in local storage
+    }
+}
+
+
 // Initialize tables
+document.addEventListener('DOMContentLoaded', () => {
+    loadPlansFromLocalStorage();
+    updateSubjectCounter();
+    createCourseTable();
+    createNewTable();
+});
 
-updateSubjectCounter();
 
-createCourseTable();
-createNewTable();
+/*
+TODO
+
+Adding filter bar on top of table
+searching name startwith can find both name.lowercase and code.lowercase and filter day checkbox dropdown จันทร์ อังคาร พุธ พฤหัส ศุกร์ and day range checkbox dropdown เช้า บ่าย เย็น
+
+Adding Filter Searching
+
+Adding Plan and Saving plan
+
+adding function plan saving
+like an button for switching plan
+default plan had 3 plan and fourth is + for adding more
+
+ส่วนของ python
+ทำหน้าส่วนจอแสดงผลเป็นตาราง tab แรก มีปุ่มกด refresh มุมขวา
+ละอีกหน้าเป็นส่วนใ่ข้อมูล คล้่ยๆ TODO add delete edit
+*/

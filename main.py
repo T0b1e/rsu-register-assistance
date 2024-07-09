@@ -252,3 +252,7 @@ if __name__ == "__main__":
 
 # TODO
 # Adding Cache only added cell changed
+# Adding Tab
+# FIrst Tab is showing table
+# Second Tab is CRUD
+# addging check website status show green or red circle next to url

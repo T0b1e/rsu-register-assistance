@@ -4,13 +4,14 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 5px;
-    background-color: #f4f4f4;
-    line-height: 1.2;
+    background-color: #e0f7fa;
+    line-height: 1.6;
+    color: #333;
 }
 
 .container {
     display: flex;
-    gap: 5px;
+    gap: 10px;
     max-width: 100%;
     height: 98vh;
     margin: 0 auto;
@@ -18,76 +19,185 @@ body {
 
 .left-side, .right-side {
     background-color: #fff;
-    padding: 10px;
-    border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     overflow-y: auto;
 }
 
-.left-side { flex: 4; }
+.left-side { flex: 3; }
 .right-side { flex: 2; }
 
 h1 {
-    margin: 0 0 5px 0;
-    color: #333;
-    font-size: 1em;
+    margin: 0 0 15px 0;
+    color: #00796b;
+    font-size: 1.5em;
     text-align: center;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 th, td {
-    padding: 4px;
+    padding: 8px;
     border: 1px solid #ddd;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     text-align: center;
     vertical-align: middle;
 }
 
-.right-side td {
-    max-width: 100px; /* Adjust as needed */
-    word-wrap: break-word;
-}
-
-/* Left table styles */
-#courseTable {
-    font-size: 12px;
-}
-
-#courseTable th, #courseTable td {
-    height: 28px; /* Slightly taller for the course table */
-}
-
-/* Right table styles */
-#newTable {
-    font-size: 14px;
-}
-
-#newTable th, #newTable td {
-    height: 32px; /* Even taller for the new table */
-}
-
 th {
-    background-color: #f2f2f2;
-    font-weight: 700;
+    background-color: #00796b;
+    color: white;
     position: sticky;
     top: 0;
     z-index: 10;
 }
 
-.subject-row:hover { background-color: #f5f5f5; }
+.subject-row:hover { background-color: #e0f2f1; }
+
+#courseTable {
+    font-size: 14px;
+}
+
+#newTable {
+    font-size: 16px;
+}
+
+#courseTable th, #courseTable td {
+    height: 20px;
+}
+
+#newTable th, #newTable td {
+    height: 20px;
+}
+
+#subjectCounter {
+    font-size: 1.2em;
+    color: #00796b;
+}
+
+/* Filter Bar Styles */
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.filter-bar input[type="text"] {
+    padding: 8px;
+    font-size: 14px;
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: #00796b;
+    color: white;
+    padding: 8px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    width: 5vw;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 8px;
+    border-radius: 4px;
+    z-index: 99;
+}
+
+.dropdown-content label {
+    display: block;
+    cursor: pointer;
+    padding: 4px 0;
+}
+
+.dropdown-content input {
+    margin-right: 8px;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.plan-selection {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.plan-selection label {
+    font-size: 14px;
+    color: #00796b;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#planSelection {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #00796b;
+    border-radius: 4px;
+    background-color: #e0f2f1;
+    color: #00796b;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+}
+
+#planSelection option {
+    background-color: #ffffff;
+    color: #00796b;
+}
+
+#planSelection:hover {
+    background-color: #004d40;
+    color: #ffffff;
+}
+
+#savePlanButton {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #00796b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#savePlanButton:hover {
+    background-color: #004d40;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+#planSelection, #savePlanButton {
+    animation: fadeIn 0.5s ease;
+}
 
 @keyframes fadeInOut {
-    0% { opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { opacity: 0; }
+    0%, 100% { opacity: 0; }
+    10%, 90% { opacity: 1; }
 }
 
 .overlap-warning {
@@ -98,17 +208,18 @@ th {
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: rgba(255, 255, 255, 0.9);
-    padding: 10px;
-    border-radius: 5px;
+    padding: 20px;
+    border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Responsive Styles */
 @media (max-width: 768px) {
-    .container { 
-        flex-direction: column; 
+    .container {
+        flex-direction: column;
         height: auto;
     }
-    .left-side, .right-side { 
+    .left-side, .right-side {
         width: 100%;
         max-height: 50vh;
     }
