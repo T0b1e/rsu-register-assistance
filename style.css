@@ -38,15 +38,17 @@ body {
   padding: 15px;
   box-shadow: var(--box-shadow);
   transition: transform var(--transition);
-  overflow-y: hidden;
 }
 
 .left-side {
   width: 70%;
+  overflow: scroll;
 }
 
 .right-side {
   width: 30%;
+  overflow-y: hidden;
+
 }
 
 /* Slide Controls */
@@ -248,6 +250,7 @@ input[type="checkbox"] {
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
+    overflow-y: scroll;
   }
 
   .left-side, .right-side {

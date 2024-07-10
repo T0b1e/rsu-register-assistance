@@ -177,6 +177,8 @@ function createCourseTable() {
                 const creditsCell = document.createElement('td');
                 creditsCell.textContent = course.credits;
                 creditsCell.rowSpan = course.schedule.length;
+
+                creditsCell.classList.add('last-column');
                 row.appendChild(creditsCell);
             }
 
