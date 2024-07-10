@@ -60,10 +60,10 @@ const data = {
             "name": "ENGINEERING MANAGEMENT",
             "code": "IEN301",
             "schedule": [
-                { "sec": "1", "day": "พุธ", "time": "15:00  -  17:50" },
+                { "sec": "1", "day": "จันทร์", "time": "15:00  -  17:50" },
                 { "sec": "2", "day": "พฤหัส", "time": "16:00  -  18:50" }
             ],
-            "type": "ปฎิบัติ",
+            "type": "ทฤษฎี",
             "price": 7200,
             "credits": 3
         },
@@ -77,7 +77,7 @@ const data = {
                 { "sec": "14", "day": "พุธ", "time": " 12:00  -  14:50" },
                 { "sec": "15", "day": "พฤหัส", "time": "09:00  -  11:50" }
             ],
-            "type": "ทฤษฎี",
+            "type": "ปฎิบัติ",
             "price": 6400,
             "credits": 1
         }
