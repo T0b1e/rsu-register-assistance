@@ -60,8 +60,8 @@ const data = {
             "name": "ENGINEERING MANAGEMENT",
             "code": "IEN301",
             "schedule": [
-                { "sec": "1", "day": "จันทร์", "time": "15:00  -  17:50" },
-                { "sec": "2", "day": "พฤหัส", "time": "16:00  -  18:50" }
+                { "sec": "1", "day": "จันทร์", "time": "15:00 - 17:50" },
+                { "sec": "2", "day": "พฤหัส", "time": "16:00 - 18:50" }
             ],
             "type": "ทฤษฎี",
             "price": 7200,
@@ -74,8 +74,8 @@ const data = {
                 { "sec": "11", "day": "อังคาร", "time": "09:00 - 11:51" },
                 { "sec": "12", "day": "อังคาร", "time": "12:00 - 14:51" },
                 { "sec": "13", "day": "พุธ", "time": "09:00 - 11:52" },
-                { "sec": "14", "day": "พุธ", "time": " 12:00  -  14:50" },
-                { "sec": "15", "day": "พฤหัส", "time": "09:00  -  11:50" }
+                { "sec": "14", "day": "พุธ", "time": "12:00 - 14:50" },
+                { "sec": "15", "day": "พฤหัส", "time": "09:00 - 11:50" }
             ],
             "type": "ปฎิบัติ",
             "price": 6400,
@@ -319,11 +319,11 @@ function addCourseToNewTable(course, schedule) {
         codeCell.textContent = course.code;
         codeCell.style.backgroundColor = subjectColor;
     } else {
-        console.warn(`Time overlap detected for ${codeCell.textContent} on ${schedule.day} at ${schedule.time}`);
+        console.warn(`Time overlap detected for ${course.code} on ${schedule.day} at ${schedule.time}`);
 
         // Show overlap warning
         const warningDiv = document.createElement('div');
-        warningDiv.textContent = `Time overlap detected for ${codeCell.textContent} on ${schedule.day} at ${schedule.time}`;
+        warningDiv.textContent = `Time overlap detected for ${course.code} on ${schedule.day} at ${schedule.time}`;
         warningDiv.classList.add('overlap-warning');
         
         document.body.appendChild(warningDiv);
@@ -342,10 +342,8 @@ function addCourseToNewTable(course, schedule) {
         setTimeout(() => {
             warningDiv.remove();
         }, 3000);
-        
     }
 }
-
 // Remove Course from New Table
 function removeCourseFromNewTable(course, schedule) {
     let dayIndex = days.indexOf(schedule.day);
