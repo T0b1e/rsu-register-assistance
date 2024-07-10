@@ -313,11 +313,12 @@ class EnrollmentApp:
             self.log(f"Total: {total_output}")
         '''
 
-         # Simulated test data
-        capacity_output = ['50', '50', '50', '50', '50', '50', '55', '55', '17', '17', '17', '17', '17', '17']
-        reserved_output = ['0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
-        confirmed_output = ['0', '0', '49', '0', '2', '0', '0', '55', '0', '0', '20', '0', '0', '0']
-        total_output = ['0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0']
+        # Simulated test data
+        # capacity_output = ['50', '50', '50', '50', '50', '50', '55', '55', '17', '17', '17', '17', '17', '17']
+        # reserved_output = ['0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+        # confirmed_output = ['0', '0', '49', '0', '2', '0', '0', '55', '0', '0', '20', '0', '0', '0']
+        # total_output = ['0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0']
+        
         return [capacity_output, reserved_output, confirmed_output, total_output]
     
     def update_table(self, data):

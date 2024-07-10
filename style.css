@@ -222,6 +222,28 @@ input[type="checkbox"] {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Warning pop-up styles */
+.overlap-warning {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #f44336; /* Red background color for warning */
+  color: white;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 0.25s ease-in-out;
+  z-index: 1000;
+}
+
+/* Fade-in effect */
+.overlap-warning.show {
+  opacity: 1;
+}
+
+
 /* Responsive Styles */
 @media (max-width: 768px) {
   .container {

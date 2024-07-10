@@ -295,13 +295,24 @@ function addCourseToNewTable(course, schedule) {
         const warningDiv = document.createElement('div');
         warningDiv.textContent = `Time overlap detected for ${codeCell.textContent} on ${schedule.day} at ${schedule.time}`;
         warningDiv.classList.add('overlap-warning');
-
+        
         document.body.appendChild(warningDiv);
-
-        // Remove the warning after the animation completes
+        
+        // Add the 'show' class to trigger the fade-in effect
+        setTimeout(() => {
+            warningDiv.classList.add('show');
+        }, 10);
+        
+        // Remove the 'show' class to trigger the fade-out effect after 1.5 seconds
+        setTimeout(() => {
+            warningDiv.classList.remove('show');
+        }, 1500);
+        
+        // Remove the warningDiv from the DOM after the fade-out completes
         setTimeout(() => {
             warningDiv.remove();
         }, 3000);
+        
     }
 }
 
