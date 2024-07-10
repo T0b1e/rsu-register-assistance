@@ -5,8 +5,8 @@ const data = {
             "name": "COMPUTER ORGANIZATION AND ARCHITECTURE",
             "code": "CPE432",
             "schedule": [
-                { "sec": "1", "day": "อังคาร", "time": "12:00 - 14:50" },
-                { "sec": "2", "day": "พฤหัส", "time": "12:00 - 14:50" }
+                { "sec": "01", "day": "อังคาร", "time": "12:00 - 14:50" },
+                { "sec": "02", "day": "พฤหัส", "time": "12:00 - 14:50" }
             ],
             "type": "ทฤษฎี",
             "price": 7200,
@@ -16,8 +16,8 @@ const data = {
             "name": "FUNDAMENTAL OF DATABASE SYSTEMS",
             "code": "CPE361",
             "schedule": [
-                { "sec": "1", "day": "อังคาร", "time": "15:00 - 17:50" },
-                { "sec": "2", "day": "ศุกร์", "time": "12:00 - 14:50" }
+                { "sec": "01", "day": "อังคาร", "time": "15:00 - 17:50" },
+                { "sec": "02", "day": "ศุกร์", "time": "12:00 - 14:50" }
             ],
             "type": "ทฤษฎี",
             "price": 7200,
@@ -27,8 +27,8 @@ const data = {
             "name": "SIGNALS AND SYSTEMS",
             "code": "CPE308",
             "schedule": [
-                { "sec": "1", "day": "พุธ", "time": "09:00 - 11:50" },
-                { "sec": "2", "day": "ศุกร์", "time": "12:00 - 14:50" }
+                { "sec": "01", "day": "พุธ", "time": "09:00 - 11:50" },
+                { "sec": "02", "day": "ศุกร์", "time": "12:00 - 14:50" }
             ],
             "type": "ทฤษฎี",
             "price": 7200,
@@ -38,8 +38,8 @@ const data = {
             "name": "COMPUTER ENGINEERING MATHEMATICS II",
             "code": "CPE332",
             "schedule": [
-                { "sec": "1", "day": "จันทร์", "time": "12:00 - 14:50" },
-                { "sec": "2", "day": "อังคาร", "time": "09:00 - 11:50" }
+                { "sec": "01", "day": "จันทร์", "time": "12:00 - 14:50" },
+                { "sec": "02", "day": "อังคาร", "time": "09:00 - 11:50" }
             ],
             "type": "ทฤษฎี",
             "price": 7200,
@@ -49,8 +49,8 @@ const data = {
             "name": "DATA COMMUNICATION AND DATA NETWORKS",
             "code": "CPE326",
             "schedule": [
-                { "sec": "1", "day": "พุธ", "time": "15:00 - 17:50" },
-                { "sec": "2", "day": "พฤหัส", "time": "15:00 - 17:50" }
+                { "sec": "01", "day": "พุธ", "time": "15:00 - 17:50" },
+                { "sec": "02", "day": "พฤหัส", "time": "15:00 - 17:50" }
             ],
             "type": "ทฤษฎี",
             "price": 7200,
@@ -60,8 +60,8 @@ const data = {
             "name": "ENGINEERING MANAGEMENT",
             "code": "IEN301",
             "schedule": [
-                { "sec": "1", "day": "จันทร์", "time": "15:00 - 17:50" },
-                { "sec": "2", "day": "พฤหัส", "time": "16:00 - 18:50" }
+                { "sec": "01", "day": "จันทร์", "time": "15:00 - 17:50" },
+                { "sec": "02", "day": "พฤหัส", "time": "16:00 - 18:50" }
             ],
             "type": "ทฤษฎี",
             "price": 7200,
@@ -71,15 +71,70 @@ const data = {
             "name": "DATA COMMUNICATION LABORATORY",
             "code": "CPE327",
             "schedule": [
-                { "sec": "11", "day": "อังคาร", "time": "09:00 - 11:51" },
-                { "sec": "12", "day": "อังคาร", "time": "12:00 - 14:51" },
-                { "sec": "13", "day": "พุธ", "time": "09:00 - 11:52" },
+                { "sec": "11", "day": "อังคาร", "time": "09:00 - 11:50" },
+                { "sec": "12", "day": "อังคาร", "time": "12:00 - 14:50" },
+                { "sec": "13", "day": "พุธ", "time": "09:00 - 11:50" },
                 { "sec": "14", "day": "พุธ", "time": "12:00 - 14:50" },
                 { "sec": "15", "day": "พฤหัส", "time": "09:00 - 11:50" }
             ],
             "type": "ปฎิบัติ",
             "price": 6400,
             "credits": 1
+        },
+        {
+            "name": "DIGITAL MEDIA LITERACY",
+            "code": "RSU160",
+            "schedule": [
+                { "sec": "01", "day": "จันทร์", "time": "08:30 - 11:50" },
+                { "sec": "02", "day": "จันทร์", "time": "08:30 - 11:50" },
+                { "sec": "03", "day": "จันทร์", "time": "08:30 - 11:50" },
+                { "sec": "04", "day": "จันทร์", "time": "08:30 - 11:50" },
+                { "sec": "05", "day": "จันทร์", "time": "08:30 - 11:50" },
+                { "sec": "06", "day": "จันทร์", "time": "12:00 - 15:30" }
+            ],
+            "type": "ทฤษฎี",
+            "price":7200,
+            "credits": 3
+        },
+        {
+            "name": "INTERNET OF THINGS",
+            "code": "CPE241",
+            "schedule": [
+                { "sec": "01", "day": "จันทร์", "time": "13:00 - 16:50" },
+                { "sec": "02", "day": "อังคาร", "time": "09:00 - 12:50" },
+                { "sec": "03", "day": "อังคาร", "time": "13:00 - 16:50" },
+                { "sec": "04", "day": "ศุกร์", "time": "09:00 - 12:50" },
+                { "sec": "05", "day": "ศุกร์", "time": "13:00 - 16:50" }
+            ],
+            "type": "ทฤษฎี",
+            "price":7200,
+            "credits": 3
+        },
+        {
+            "name": "OBJECT-ORIENTED PROGRAMMING",
+            "code": "CPE263",
+            "schedule": [
+                { "sec": "01", "day": "จันทร์", "time": "09:00 - 12:50" },
+                { "sec": "02", "day": "จันทร์", "time": "13:00 - 16:50" },
+                { "sec": "03", "day": "อังคาร", "time": "09:00 - 12:50" },
+                { "sec": "04", "day": "พุธ", "time": "09:00 - 12:50" },
+                { "sec": "05", "day": "พุธ", "time": "13:00 - 16:50" }
+            ],
+            "type": "ทฤษฎี",
+            "price":7200,
+            "credits": 3
+        },
+        {
+            "name": "COMPUTER ENGINEERING MATHEMATICS 1",
+            "code": "CPE231",
+            "schedule": [
+                { "sec": "01", "day": "อังคาร", "time": "13:00 - 15:50" },
+                { "sec": "02", "day": "พฤหัส", "time": "12:00 - 14:50" },
+                { "sec": "03", "day": "ศุกร์", "time": "13:00 - 16:50" }
+            ],
+            "type": "ทฤษฎี",
+            "price":7200,
+            "credits": 3
         }
     ]
 };
@@ -290,9 +345,9 @@ function addCourseToNewTable(course, schedule) {
         console.log(`Unknown day: ${schedule.day}`);
         return;
     }
-
     const rows = newTableBody.querySelectorAll('tr');
     const row1 = rows[dayIndex * 2];
+
     const row2 = rows[dayIndex * 2 + 1];
 
     const timeParts = schedule.time.split(' - ');
@@ -302,10 +357,15 @@ function addCourseToNewTable(course, schedule) {
     let timeCell, codeCell;
     if (startTime < "12:00") {
         timeCell = row1.children[1];
-        codeCell = row2.children[0];
+        codeCell = row2.children[0] // `${row2.children[0]} (${})`;
     } else if (startTime >= "12:00" && endTime <= "14:50") {
         timeCell = row1.children[2];
-        codeCell = row2.children[1];
+        codeCell = row2.children[1]; 
+    } else if (startTime >= "09:00" && endTime <= "12:50") {
+        timeCell = row1.children[2];
+        timeCell = row1.children[3];
+        codeCell = row2.children[1]; 
+        codeCell = row2.children[2]; 
     } else {
         timeCell = row1.children[3];
         codeCell = row2.children[2];
@@ -316,7 +376,7 @@ function addCourseToNewTable(course, schedule) {
     if (timeCell && !timeCell.textContent && codeCell && !codeCell.textContent) {
         timeCell.textContent = schedule.time;
         timeCell.style.backgroundColor = subjectColor;
-        codeCell.textContent = course.code;
+        codeCell.textContent = `${course.code} (${schedule.sec})`;
         codeCell.style.backgroundColor = subjectColor;
     } else {
         console.warn(`Time overlap detected for ${course.code} on ${schedule.day} at ${schedule.time}`);
@@ -357,7 +417,7 @@ function removeCourseFromNewTable(course, schedule) {
     const row2 = rows[dayIndex * 2 + 1];
 
     for (let i = 1; i <= 3; i++) {
-        if (row2.children[i - 1].textContent === course.code) {
+        if (row2.children[i - 1].textContent === `${course.code} (${schedule.sec})`) {
             row1.children[i].textContent = '';
             row1.children[i].style.backgroundColor = '';
             row2.children[i - 1].textContent = '';
@@ -489,3 +549,5 @@ document.addEventListener('DOMContentLoaded', () => {
     createCourseTable();
     createNewTable();
 });
+
+// adding subject

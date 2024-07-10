@@ -28,7 +28,7 @@ body {
 .container {
   display: flex;
   width: 100vw;
-  height: 100vh;
+  height: auto;
   
 }
 
@@ -40,14 +40,24 @@ body {
   transition: transform var(--transition);
 }
 
+
 .left-side {
   width: 70%;
+  overflow-y: scroll; /* Enable scrolling */
+  height: 100vh; /* Full viewport height */
+  padding: 15px;
+  background-color: var(--card-background);
 }
 
 .right-side {
   width: 30%;
-  overflow-y: hidden;
-
+  padding: 15px;
+  background-color: var(--card-background);
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  top: 0;
+  height: 100vh; /* Full viewport height */
+  box-shadow: var(--box-shadow);
 }
 
 /* Slide Controls */
