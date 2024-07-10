@@ -9,6 +9,7 @@ const data = {
                 { "sec": "2", "day": "พฤหัส", "time": "12:00 - 14:50" }
             ],
             "type": "ทฤษฎี",
+            "price": 7200,
             "credits": 3
         },
         {
@@ -19,6 +20,7 @@ const data = {
                 { "sec": "2", "day": "ศุกร์", "time": "12:00 - 14:50" }
             ],
             "type": "ทฤษฎี",
+            "price": 7200,
             "credits": 3
         },
         {
@@ -29,6 +31,7 @@ const data = {
                 { "sec": "2", "day": "ศุกร์", "time": "12:00 - 14:50" }
             ],
             "type": "ทฤษฎี",
+            "price": 7200,
             "credits": 3
         },
         {
@@ -39,6 +42,7 @@ const data = {
                 { "sec": "2", "day": "อังคาร", "time": "09:00 - 11:50" }
             ],
             "type": "ทฤษฎี",
+            "price": 7200,
             "credits": 3
         },
         {
@@ -49,6 +53,7 @@ const data = {
                 { "sec": "2", "day": "พฤหัส", "time": "15:00 - 17:50" }
             ],
             "type": "ทฤษฎี",
+            "price": 7200,
             "credits": 3
         },
         {
@@ -59,6 +64,7 @@ const data = {
                 { "sec": "2", "day": "อังคาร", "time": "12:00 - 14:50" }
             ],
             "type": "ปฎิบัติ",
+            "price": 7200,
             "credits": 3
         },
         {
@@ -72,6 +78,7 @@ const data = {
                 { "sec": "15", "day": "พฤหัส", "time": "16:00 - 18:50" }
             ],
             "type": "ทฤษฎี",
+            "price": 6400,
             "credits": 1
         }
     ]
@@ -190,7 +197,28 @@ function createCourseTable() {
 // Update Subject Counter
 function updateSubjectCounter() {
     const counterElement = document.getElementById('subjectCounter');
-    counterElement.textContent = `${selectedSubjectsCount} / 7 subjects selected`;
+    let totalSumPrice = 0;
+    let totalCredits = 0;
+    Object.values(selectedCourses).forEach(courseInfo => {
+        const course = data.courses.find(c => c.code);
+        if (course) {
+            totalSumPrice += course.price;
+            totalCredits += course.credits;
+        } else {
+        }
+    });
+
+    const selectedSubjectsText = `${selectedSubjectsCount} / 7 subjects selected`;
+    const sumPriceText = `Sum Price: ${totalSumPrice.toLocaleString()} / Sum`;
+    const sumCreditsText = `Sum Credits: ${totalCredits} / 21`;
+
+    counterElement.innerHTML = `
+        <div class="counter-text">
+            <span class="selected-subjects">${selectedSubjectsText}</span>
+            <span class="sum-price">${sumPriceText}</span>
+            <span class="sum-credits">${sumCreditsText}</span>
+        </div>
+    `;
 }
 
 // Create New Table

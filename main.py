@@ -318,7 +318,7 @@ class EnrollmentApp:
         # reserved_output = ['0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
         # confirmed_output = ['0', '0', '49', '0', '2', '0', '0', '55', '0', '0', '20', '0', '0', '0']
         # total_output = ['0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0']
-        
+
         return [capacity_output, reserved_output, confirmed_output, total_output]
     
     def update_table(self, data):
@@ -345,20 +345,23 @@ class EnrollmentApp:
                 if index < len(capacity):
                     confirmed_int = int(confirmed[index])
                     capacity_int = int(capacity[index])
-                    
+                    total_int = int(total[index])
+
                     # Determine the tag based on the confirmed value
                     tag = ''
                     if confirmed_int == capacity_int:
                         tag = 'red_bg'
                     elif confirmed_int >= capacity_int * 0.8:
                         tag = 'yellow_bg'
-                    
-                    self.table.insert("", "end", values=(subject_code, "ทฤษฎี", capacity[index], reserved[index], confirmed[index], total[index], "วันเรียน", "เวลาเรียน", "ห้องเรียน"), tags=(tag,))
+
+                    # Insert the row with the tag applied only to the "total" column
+                    row_values = (subject_code, "ทฤษฎี", capacity[index], reserved[index], confirmed[index], total[index], "วันเรียน", "เวลาเรียน", "ห้องเรียน")
+                    tags = ('', '', '', '', '', tag, '', '', '')
+                    self.table.insert("", "end", values=row_values, tags=tags)
                     index += 1
-            
+
             # Add a blank row for underline effect
             self.table.insert("", "end", values=("", "", "", "", "", "", "", "", ""), tags=())
-
     '''
     def connect_google_sheet(self, capacity, reserved, confirmed, total):
         self.log("Connecting to Google Sheet...")
