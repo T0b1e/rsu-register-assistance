@@ -1,179 +1,19 @@
-// Data and Configuration
-const data = {
-    "courses": [
-        {
-            "name": "COMPUTER ORGANIZATION AND ARCHITECTURE",
-            "code": "CPE432",
-            "schedule": [
-                { "sec": "01", "day": "อังคาร", "time": "12:00 - 14:50" },
-                { "sec": "02", "day": "พฤหัส", "time": "12:00 - 14:50" }
-            ],
-            "type": "ทฤษฎี",
-            "price": 7200,
-            "credits": 3
-        },
-        {
-            "name": "FUNDAMENTAL OF DATABASE SYSTEMS",
-            "code": "CPE361",
-            "schedule": [
-                { "sec": "01", "day": "อังคาร", "time": "15:00 - 17:50" },
-                { "sec": "02", "day": "ศุกร์", "time": "12:00 - 14:50" }
-            ],
-            "type": "ทฤษฎี",
-            "price": 7200,
-            "credits": 3
-        },
-        {
-            "name": "SIGNALS AND SYSTEMS",
-            "code": "CPE308",
-            "schedule": [
-                { "sec": "01", "day": "พุธ", "time": "09:00 - 11:50" },
-                { "sec": "02", "day": "ศุกร์", "time": "12:00 - 14:50" }
-            ],
-            "type": "ทฤษฎี",
-            "price": 7200,
-            "credits": 3
-        },
-        {
-            "name": "COMPUTER ENGINEERING MATHEMATICS II",
-            "code": "CPE332",
-            "schedule": [
-                { "sec": "01", "day": "จันทร์", "time": "12:00 - 14:50" },
-                { "sec": "02", "day": "อังคาร", "time": "09:00 - 11:50" }
-            ],
-            "type": "ทฤษฎี",
-            "price": 7200,
-            "credits": 3
-        },
-        {
-            "name": "DATA COMMUNICATION AND DATA NETWORKS",
-            "code": "CPE326",
-            "schedule": [
-                { "sec": "01", "day": "พุธ", "time": "15:00 - 17:50" },
-                { "sec": "02", "day": "พฤหัส", "time": "15:00 - 17:50" }
-            ],
-            "type": "ทฤษฎี",
-            "price": 7200,
-            "credits": 3
-        },
-        {
-            "name": "ENGINEERING MANAGEMENT",
-            "code": "IEN301",
-            "schedule": [
-                { "sec": "01", "day": "จันทร์", "time": "15:00 - 17:50" },
-                { "sec": "02", "day": "พฤหัส", "time": "16:00 - 18:50" }
-            ],
-            "type": "ทฤษฎี",
-            "price": 7200,
-            "credits": 3
-        },
-        {
-            "name": "DATA COMMUNICATION LABORATORY",
-            "code": "CPE327",
-            "schedule": [
-                { "sec": "11", "day": "อังคาร", "time": "09:00 - 11:50" },
-                { "sec": "12", "day": "อังคาร", "time": "12:00 - 14:50" },
-                { "sec": "13", "day": "พุธ", "time": "09:00 - 11:50" },
-                { "sec": "14", "day": "พุธ", "time": "12:00 - 14:50" },
-                { "sec": "15", "day": "พฤหัส", "time": "09:00 - 11:50" }
-            ],
-            "type": "ปฎิบัติ",
-            "price": 6400,
-            "credits": 1
-        },
-        {
-            "name": "DIGITAL MEDIA LITERACY",
-            "code": "RSU160",
-            "schedule": [
-                { "sec": "01", "day": "จันทร์", "time": "08:30 - 11:50" },
-                { "sec": "02", "day": "จันทร์", "time": "08:30 - 11:50" },
-                { "sec": "03", "day": "จันทร์", "time": "08:30 - 11:50" },
-                { "sec": "04", "day": "จันทร์", "time": "08:30 - 11:50" },
-                { "sec": "05", "day": "จันทร์", "time": "08:30 - 11:50" },
-                { "sec": "06", "day": "จันทร์", "time": "12:00 - 15:30" }
-            ],
-            "type": "ทฤษฎี",
-            "price":4200,
-            "credits": 3
-        },
-        {
-            "name": "INTERNET OF THINGS",
-            "code": "CPE241",
-            "schedule": [
-                { "sec": "01", "day": "จันทร์", "time": "13:00 - 16:50" },
-                { "sec": "02", "day": "อังคาร", "time": "09:00 - 12:50" },
-                { "sec": "03", "day": "อังคาร", "time": "13:00 - 16:50" },
-                { "sec": "04", "day": "ศุกร์", "time": "09:00 - 12:50" },
-                { "sec": "05", "day": "ศุกร์", "time": "13:00 - 16:50" }
-            ],
-            "type": "ทฤษฎี",
-            "price":7200,
-            "credits": 3
-        },
-        {
-            "name": "OBJECT-ORIENTED PROGRAMMING",
-            "code": "CPE263",
-            "schedule": [
-                { "sec": "01", "day": "จันทร์", "time": "09:00 - 12:50" },
-                { "sec": "02", "day": "จันทร์", "time": "13:00 - 16:50" },
-                { "sec": "03", "day": "อังคาร", "time": "09:00 - 12:50" },
-                { "sec": "04", "day": "พุธ", "time": "09:00 - 12:50" },
-                { "sec": "05", "day": "พุธ", "time": "13:00 - 16:50" }
-            ],
-            "type": "ทฤษฎี",
-            "price":7200,
-            "credits": 3
-        },
-        {
-            "name": "COMPUTER ENGINEERING MATHEMATICS 1",
-            "code": "CPE231",
-            "schedule": [
-                { "sec": "01", "day": "อังคาร", "time": "13:00 - 15:50" },
-                { "sec": "02", "day": "พฤหัส", "time": "12:00 - 14:50" },
-                { "sec": "03", "day": "ศุกร์", "time": "13:00 - 16:50" }
-            ],
-            "type": "ทฤษฎี",
-            "price":7200,
-            "credits": 3
-        }
-    ]
-};
-
-const dayColors = {
-    'จันทร์': '#B0A695',
-    'อังคาร': '#E7D4B5',
-    'พุธ': '#F6E6CB',
-    'พฤหัส': '#B6C7AA',
-    'ศุกร์': '#A0937D'  
-};
-
-const subjectColors = [
-    '#5AB2FF',
-    '#A0DEFF',
-    '#CAF4FF',
-    '#B3C8CF',
-    '#BED7DC',
-    '#F1EEDC',
-    '#FFF9D0'
-];
-
-// DOM Elements
-const courseTableBody = document.querySelector('#courseTable tbody');
-const newTableBody = document.querySelector('#newTable tbody');
-const days = ["จันทร์", "อังคาร", "พุธ", "พฤหัส", "ศุกร์"];
-const numRowsPerDay = 2;
+// src/functions.js
+import { data, dayColors, subjectColors } from './data.js';
+import { courseTableBody, newTableBody, days } from './domElements.js';
 
 let colorIndex = 0;
 const subjectColorMapping = {};
-
-// Object to track selected courses
 let selectedCourses = {};
 let selectedSubjectsCount = 0;
+let plans = {
+    "plan-1": { courses: {}, checkboxes: {} },
+    "plan-2": { courses: {}, checkboxes: {} },
+    "plan-3": { courses: {}, checkboxes: {} }
+};
+let currentPlan = "plan-1";
 
-// Functions
-
-// Create Course Table
-function createCourseTable() {
+export function createCourseTable() {
     data.courses.forEach(course => {
         const subjectColor = subjectColors[colorIndex % subjectColors.length];
         subjectColorMapping[course.code] = subjectColor;
@@ -191,8 +31,8 @@ function createCourseTable() {
 
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
-            checkbox.style.width = '20px'; // Increase the width of the checkbox
-            checkbox.style.height = '20px'; // Increase the height of the checkbox
+            checkbox.style.width = '20px';
+            checkbox.style.height = '20px';
             checkbox.addEventListener('change', () => handleCheckboxChange(course, schedule, checkbox));
 
             const checkmark = document.createElement('span');
@@ -249,8 +89,7 @@ function createCourseTable() {
     });
 }
 
-// Update Subject Counter
-function updateSubjectCounter() {
+export function updateSubjectCounter() {
     const counterElement = document.getElementById('subjectCounter');
     let totalSumPrice = 0;
     let totalCredits = 0;
@@ -259,7 +98,6 @@ function updateSubjectCounter() {
         if (course) {
             totalSumPrice += course.price;
             totalCredits += course.credits;
-        } else {
         }
     });
 
@@ -276,19 +114,16 @@ function updateSubjectCounter() {
     `;
 }
 
-// Create New Table
-function createNewTable() {
+export function createNewTable() {
     days.forEach((day, index) => {
-        // Create the day row
         const dayRow = document.createElement('tr');
         const dayCell = document.createElement('td');
         dayCell.textContent = day;
-        dayCell.rowSpan = 2;  // Span two rows
+        dayCell.rowSpan = 2;
         dayCell.classList.add(day.toLowerCase());
         dayCell.style.backgroundColor = dayColors[day];
         dayRow.appendChild(dayCell);
 
-        // Add three more cells to the day row
         for (let j = 0; j < 3; j++) {
             const cell = document.createElement('td');
             cell.classList.add(`row1`, `col${j + 1}`);
@@ -296,9 +131,7 @@ function createNewTable() {
         }
         newTableBody.appendChild(dayRow);
 
-        // Create the second row for this day
         const secondRow = document.createElement('tr');
-        // Add three cells to the second row
         for (let j = 0; j < 3; j++) {
             const cell = document.createElement('td');
             cell.classList.add(`row2`, `col${j}`);
@@ -308,18 +141,15 @@ function createNewTable() {
     });
 }
 
-// Handle Checkbox Change
-function handleCheckboxChange(course, schedule, checkbox) {
+export function handleCheckboxChange(course, schedule, checkbox) {
     const courseKey = `${course.code}-${schedule.sec}`;
 
     if (checkbox.checked) {
-        // Uncheck any previously selected section for this course
         if (selectedCourses[course.code]) {
             const prevCheckbox = document.querySelector(`input[type="checkbox"][data-course="${course.code}"][data-section="${selectedCourses[course.code].section}"]`);
             if (prevCheckbox) prevCheckbox.checked = false;
             removeCourseFromNewTable(course, selectedCourses[course.code].schedule);
         } else {
-            // Only increment if it's a new course, not just a different section
             selectedSubjectsCount++;
         }
 
@@ -331,15 +161,13 @@ function handleCheckboxChange(course, schedule, checkbox) {
         selectedSubjectsCount--;
     }
 
-    // Set data attributes for easy selection later
     checkbox.setAttribute('data-course', course.code);
     checkbox.setAttribute('data-section', schedule.sec);
 
     updateSubjectCounter();
 }
 
-// Add Course to New Table
-function addCourseToNewTable(course, schedule) {
+export function addCourseToNewTable(course, schedule) {
     let dayIndex = days.indexOf(schedule.day);
     if (dayIndex === -1) {
         console.log(`Unknown day: ${schedule.day}`);
@@ -357,15 +185,15 @@ function addCourseToNewTable(course, schedule) {
     let timeCell, codeCell;
     if (startTime < "12:00") {
         timeCell = row1.children[1];
-        codeCell = row2.children[0] // `${row2.children[0]} (${})`;
+        codeCell = row2.children[0];
     } else if (startTime >= "12:00" && endTime <= "14:50") {
         timeCell = row1.children[2];
-        codeCell = row2.children[1]; 
+        codeCell = row2.children[1];
     } else if (startTime >= "09:00" && endTime <= "12:50") {
         timeCell = row1.children[2];
         timeCell = row1.children[3];
-        codeCell = row2.children[1]; 
-        codeCell = row2.children[2]; 
+        codeCell = row2.children[1];
+        codeCell = row2.children[2];
     } else {
         timeCell = row1.children[3];
         codeCell = row2.children[2];
@@ -381,31 +209,27 @@ function addCourseToNewTable(course, schedule) {
     } else {
         console.warn(`Time overlap detected for ${course.code} on ${schedule.day} at ${schedule.time}`);
 
-        // Show overlap warning
         const warningDiv = document.createElement('div');
         warningDiv.textContent = `Time overlap detected for ${course.code} on ${schedule.day} at ${schedule.time}`;
         warningDiv.classList.add('overlap-warning');
-        
+
         document.body.appendChild(warningDiv);
-        
-        // Add the 'show' class to trigger the fade-in effect
+
         setTimeout(() => {
             warningDiv.classList.add('show');
         }, 10);
-        
-        // Remove the 'show' class to trigger the fade-out effect after 1.5 seconds
+
         setTimeout(() => {
             warningDiv.classList.remove('show');
         }, 1500);
-        
-        // Remove the warningDiv from the DOM after the fade-out completes
+
         setTimeout(() => {
             warningDiv.remove();
         }, 3000);
     }
 }
-// Remove Course from New Table
-function removeCourseFromNewTable(course, schedule) {
+
+export function removeCourseFromNewTable(course, schedule) {
     let dayIndex = days.indexOf(schedule.day);
     if (dayIndex === -1) {
         console.log(`Unknown day: ${schedule.day}`);
@@ -427,21 +251,7 @@ function removeCourseFromNewTable(course, schedule) {
     }
 }
 
-// Plan Management
-let currentPlan = "plan-1";
-let plans = {
-    "plan-1": { courses: {}, checkboxes: {} },
-    "plan-2": { courses: {}, checkboxes: {} },
-    "plan-3": { courses: {}, checkboxes: {} }
-};
-
-const planSelection = document.getElementById('planSelection');
-const savePlanButton = document.getElementById('savePlanButton');
-
-planSelection.addEventListener('change', handlePlanChange);
-savePlanButton.addEventListener('click', saveCurrentPlan);
-
-function handlePlanChange() {
+export function handlePlanChange() {
     const selectedPlan = planSelection.value;
     if (selectedPlan === 'new-plan') {
         const newPlanName = prompt('Enter the name of the new plan:');
@@ -460,8 +270,7 @@ function handlePlanChange() {
     }
 }
 
-// Save Current Plan
-function saveCurrentPlan() {
+export function saveCurrentPlan() {
     const savedSelectedCourses = {};
     document.querySelectorAll('.subject-row input[type="checkbox"]').forEach(checkbox => {
         if (checkbox.checked) {
@@ -478,25 +287,21 @@ function saveCurrentPlan() {
     alert(`Plan "${currentPlan}" saved successfully!`);
 }
 
-// Load Plan
-function loadPlan(plan) {
-    // Clear current selections
+export function loadPlan(plan) {
     Object.keys(selectedCourses).forEach(code => {
         const schedule = selectedCourses[code].schedule;
         removeCourseFromNewTable(data.courses.find(course => course.code === code), schedule);
     });
 
-    const planData = plans[plan] || { courses: {}, checkboxes: {} }; // Ensure planData is always an object
-    selectedCourses = JSON.parse(JSON.stringify(planData.courses || {})); // Ensure courses is always an object
+    const planData = plans[plan] || { courses: {}, checkboxes: {} };
+    selectedCourses = JSON.parse(JSON.stringify(planData.courses || {}));
     selectedSubjectsCount = Object.keys(selectedCourses).length;
     updateSubjectCounter();
 
-    // Clear all checkboxes first
     document.querySelectorAll('.subject-row input[type="checkbox"]').forEach(checkbox => {
         checkbox.checked = false;
     });
 
-    // Restore checkboxes
     if (planData.checkboxes) {
         Object.keys(planData.checkboxes).forEach(courseCode => {
             const section = planData.checkboxes[courseCode];
@@ -514,18 +319,16 @@ function loadPlan(plan) {
     });
 }
 
-// Local Storage Operations
-function savePlansToLocalStorage() {
+export function savePlansToLocalStorage() {
     localStorage.setItem('plans', JSON.stringify(plans));
 }
 
-function loadPlansFromLocalStorage() {
+export function loadPlansFromLocalStorage() {
     const storedPlans = localStorage.getItem('plans');
     if (storedPlans) {
         try {
             const parsedPlans = JSON.parse(storedPlans);
             Object.assign(plans, parsedPlans);
-            // Populate plan selection dropdown with saved plans
             Object.keys(plans).forEach(planName => {
                 if (!document.querySelector(`#planSelection option[value="${planName}"]`)) {
                     const newOption = document.createElement('option');
@@ -538,16 +341,6 @@ function loadPlansFromLocalStorage() {
             console.error('Error parsing saved plans:', e);
         }
     } else {
-        savePlansToLocalStorage(); // Save default plans if no plans found in local storage
+        savePlansToLocalStorage();
     }
 }
-
-// Initialize tables on DOMContentLoaded
-document.addEventListener('DOMContentLoaded', () => {
-    loadPlansFromLocalStorage();
-    updateSubjectCounter();
-    createCourseTable();
-    createNewTable();
-});
-
-// adding subject
