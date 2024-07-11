@@ -180,15 +180,11 @@ class EnrollmentApp:
             data = self.get_data(headless, username, password)
             if data and not self.stop_flag.is_set():
                 self.update_table(data)
-                capacity, reserved, confirmed, total = data
-
-                # TODO
-                # self.connect_google_sheet(capacity, reserved, confirmed, total)
-                
         except Exception as e:
             self.log(f"An error occurred: {str(e)}")
         finally:
             self.root.after(0, self.finish_process)
+
 
     def finish_process(self):
         self.progress.stop()
@@ -242,7 +238,9 @@ class EnrollmentApp:
 
             subject_codes = ['CPE432', 'CPE361', 'CPE308', 'CPE332', 'CPE326', 'IEN301']
 
-            capacity_output, reserved_output, confirmed_output, total_output = [], [], [], []
+            data_output = []
+
+            theory_output, capacity_output, reserved_output, confirmed_output, total_output, day_output, time_output = [], [], [], [], [], [], []  
 
             for subject_code in subject_codes:
                 if self.stop_flag.is_set():
@@ -267,10 +265,9 @@ class EnrollmentApp:
 
                 for row in rows:
                     columns = row.find_elements(By.TAG_NAME, 'td')
-                    capacity_output.append(columns[2].text)
-                    reserved_output.append(columns[3].text)
-                    confirmed_output.append(columns[4].text)
-                    total_output.append(columns[5].text)
+                    subject_data = [columns[i].text for i in range(9)]
+                    data_output.append(subject_data)
+                    # note = columns[9].text
 
                 time.sleep(2)
 
@@ -296,10 +293,9 @@ class EnrollmentApp:
 
             for row in rows:
                 columns = row.find_elements(By.TAG_NAME, 'td')
-                capacity_output.append(columns[2].text)
-                reserved_output.append(columns[3].text)
-                confirmed_output.append(columns[4].text)
-                total_output.append(columns[5].text)
+                subject_data = [columns[i].text for i in range(9)]
+                data_output.append(subject_data)
+
 
         finally:
             browser.quit()
@@ -319,49 +315,34 @@ class EnrollmentApp:
         # confirmed_output = ['0', '0', '49', '0', '2', '0', '0', '55', '0', '0', '20', '0', '0', '0']
         # total_output = ['0', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0']
 
-        return [capacity_output, reserved_output, confirmed_output, total_output]
+        return data_output
     
     def update_table(self, data):
-        capacity, reserved, confirmed, total = data
         self.table.delete(*self.table.get_children())
-
-        subject_codes = ['CPE432', 'CPE361', 'CPE308', 'CPE332', 'CPE326', 'IEN301']
-        subjects_mapping = {
-            'CPE432': 2,
-            'CPE361': 2,
-            'CPE308': 2,
-            'CPE332': 2,
-            'CPE326': 2,
-            'IEN301': 6
-        }
 
         # Define tags for background colors
         self.table.tag_configure('yellow_bg', background='yellow')
         self.table.tag_configure('red_bg', background='red')
 
-        index = 0
-        for subject_code in subject_codes:
-            for _ in range(subjects_mapping[subject_code]):
-                if index < len(capacity):
-                    confirmed_int = int(confirmed[index])
-                    capacity_int = int(capacity[index])
-                    total_int = int(total[index])
+        for row in data:
+            confirmed_int = int(row[4])
+            capacity_int = int(row[2])
+            total_int = int(row[5])
 
-                    # Determine the tag based on the confirmed value
-                    tag = ''
-                    if confirmed_int == capacity_int:
-                        tag = 'red_bg'
-                    elif confirmed_int >= capacity_int * 0.8:
-                        tag = 'yellow_bg'
+            # Determine the tag based on the confirmed value
+            tag = ''
+            if confirmed_int == capacity_int:
+                tag = 'red_bg'
+            elif confirmed_int >= capacity_int * 0.8:
+                tag = 'yellow_bg'
 
-                    # Insert the row with the tag applied only to the "total" column
-                    row_values = (subject_code, "ทฤษฎี", capacity[index], reserved[index], confirmed[index], total[index], "วันเรียน", "เวลาเรียน", "ห้องเรียน")
-                    tags = ('', '', '', '', '', tag, '', '', '')
-                    self.table.insert("", "end", values=row_values, tags=tags)
-                    index += 1
+            # Insert the row with the tag applied only to the "total" column
+            tags = ('', '', '', '', '', tag, '', '', '')
+            self.table.insert("", "end", values=row, tags=tags)
 
-            # Add a blank row for underline effect
-            self.table.insert("", "end", values=("", "", "", "", "", "", "", "", ""), tags=())
+        # Add a blank row for underline effect
+        self.table.insert("", "end", values=("", "", "", "", "", "", "", "", ""), tags=())
+
     '''
     def connect_google_sheet(self, capacity, reserved, confirmed, total):
         self.log("Connecting to Google Sheet...")

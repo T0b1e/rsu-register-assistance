@@ -3,10 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./src/style.css" rel="stylesheet">
+    <link href="./src/style/main.css" rel="stylesheet">
     <title>เว็ปช่วยลงทะเบียนเรียน</title>
 </head>
 <body>
+    
+    <!-- Add Subject Modal -->
+    <div id="addSubjectModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModalBtn" class="close">&times;</span>
+            <h2>Add New Subject</h2>
+            <label>Subject Name: <input type="text" id="subjectTitle"></label>
+            <label>Code Name: <input type="text" id="subjectCode"></label>
+            <label>Credit: <input type="number" id="subjectCredit" value="3"></label>
+            <label>Price: <input type="number" id="subjectPrice" value="1600" min="1600" max="7200"></label>
+            <div id="sectionsContainer"></div>
+            <button id="addSectionBtn">Add Section</button>
+            <div class="modal-footer">
+                <button id="saveSubjectBtn">Save Subject</button>
+            </div>
+
+            <!-- Add this inside the modal-content div -->
+            <label>Type:</label>
+            <div class="radio-group">
+            <label>
+                <input type="radio" name="subjectType" value="ทฤษฎี" checked> ทฤษฎี
+            </label>
+            <label>
+                <input type="radio" name="subjectType" value="ปฎิบัติ"> ปฎิบัติ
+            </label>
+            </div>
+
+        </div>
+    </div>
+
     <div class="container">
         <div class="left-side">
             <div class="table-container">
@@ -46,6 +76,7 @@
                         <th>Time</th>
                         <th>Type</th>
                         <th>Credits</th>
+                        <th>Edit</th>
                     </tr>
                 </thead>
                 <tbody>

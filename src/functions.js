@@ -13,13 +13,19 @@ let plans = {
 };
 let currentPlan = "plan-1";
 
+let currentEditIndex = null; // Store the index of the course being edited
+
+// Updated createCourseTable to include Edit button
 export function createCourseTable() {
-    data.courses.forEach(course => {
+    // Clear existing table content
+    courseTableBody.innerHTML = '';
+
+    data.courses.forEach((course, index) => {
         const subjectColor = subjectColors[colorIndex % subjectColors.length];
         subjectColorMapping[course.code] = subjectColor;
         colorIndex++;
 
-        course.schedule.forEach((schedule, index) => {
+        course.schedule.forEach((schedule, indexSchedule) => {
             const row = document.createElement('tr');
             row.classList.add('subject-row');
 
@@ -43,7 +49,7 @@ export function createCourseTable() {
             checkboxCell.appendChild(checkboxContainer);
             row.appendChild(checkboxCell);
 
-            if (index === 0) {
+            if (indexSchedule === 0) {
                 const nameCell = document.createElement('td');
                 nameCell.textContent = course.name;
                 nameCell.style.backgroundColor = subjectColor;
@@ -55,6 +61,11 @@ export function createCourseTable() {
                 codeCell.style.backgroundColor = subjectColor;
                 codeCell.rowSpan = course.schedule.length;
                 row.appendChild(codeCell);
+
+                const typeCell = document.createElement('td');
+                typeCell.textContent = course.type;
+                typeCell.rowSpan = course.schedule.length;
+                row.appendChild(typeCell);
             }
 
             const secCell = document.createElement('td');
@@ -70,24 +81,39 @@ export function createCourseTable() {
             timeCell.textContent = schedule.time;
             row.appendChild(timeCell);
 
-            if (index === 0) {
-                const typeCell = document.createElement('td');
-                typeCell.textContent = course.type;
-                typeCell.rowSpan = course.schedule.length;
-                row.appendChild(typeCell);
-
+            if (indexSchedule === 0) {
                 const creditsCell = document.createElement('td');
                 creditsCell.textContent = course.credits;
                 creditsCell.rowSpan = course.schedule.length;
-
                 creditsCell.classList.add('last-column');
                 row.appendChild(creditsCell);
+
+                const editCell = document.createElement('td');
+                editCell.rowSpan = course.schedule.length;
+                editCell.classList.add('edit-column');
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.className = 'edit-button'; // Add class to button
+                editButton.addEventListener('click', () => editSubject(index));
+                editCell.appendChild(editButton);
+                row.appendChild(editCell);
             }
 
             courseTableBody.appendChild(row);
         });
     });
+
+    // Add the last row for new subject
+    const addRow = document.createElement('tr');
+    const addCell = document.createElement('td');
+    addCell.colSpan = 9;
+    addCell.classList.add('add-new-subject');
+    addCell.textContent = '+ Add New Subject';
+    addCell.addEventListener('click', openAddSubjectModal);
+    addRow.appendChild(addCell);
+    courseTableBody.appendChild(addRow);
 }
+
 
 export function updateSubjectCounter() {
     const counterElement = document.getElementById('subjectCounter');
@@ -344,3 +370,228 @@ export function loadPlansFromLocalStorage() {
         savePlansToLocalStorage();
     }
 }
+
+// Open Modal to Add Subject
+function openAddSubjectModal() {
+    const modal = document.getElementById('addSubjectModal');
+    modal.style.display = 'block';
+}
+
+// Close Modal
+function closeAddSubjectModal() {
+    const modal = document.getElementById('addSubjectModal');
+    modal.style.display = 'none';
+}
+
+// Add New Subject
+function addNewSubject() {
+    if (!validateFormInputs()) {
+        return;
+    }
+
+    const titleInput = document.getElementById('subjectTitle');
+    const codeInput = document.getElementById('subjectCode');
+    const creditInput = document.getElementById('subjectCredit');
+    const priceInput = document.getElementById('subjectPrice');
+    const sectionsContainer = document.getElementById('sectionsContainer');
+    const sections = sectionsContainer.querySelectorAll('.section');
+    const subjectType = document.querySelector('input[name="subjectType"]:checked').value;
+
+    const newSubject = {
+        name: titleInput.value,
+        code: codeInput.value,
+        credits: parseInt(creditInput.value),
+        price: parseInt(priceInput.value),
+        type: subjectType,
+        schedule: []
+    };
+
+    sections.forEach(section => {
+        const daySelect = section.querySelector('.day-select');
+        const startTimeInput = section.querySelector('.start-time');
+        const endTimeInput = section.querySelector('.end-time');
+        const sectionNumberInput = section.querySelector('.section-number');
+
+        newSubject.schedule.push({
+            day: daySelect.value,
+            time: `${startTimeInput.value} - ${endTimeInput.value}`,
+            sec: sectionNumberInput.value
+        });
+    });
+
+    if (currentEditIndex !== null) {
+        data.courses[currentEditIndex] = newSubject;
+        currentEditIndex = null;
+    } else {
+        data.courses.push(newSubject);
+    }
+
+    createCourseTable();
+    closeAddSubjectModal();
+}
+
+// Edit subject
+function editSubject(index) {
+    currentEditIndex = index;
+    const course = data.courses[index];
+
+    const titleInput = document.getElementById('subjectTitle');
+    const codeInput = document.getElementById('subjectCode');
+    const creditInput = document.getElementById('subjectCredit');
+    const priceInput = document.getElementById('subjectPrice');
+    const sectionsContainer = document.getElementById('sectionsContainer');
+    sectionsContainer.innerHTML = '';
+    const subjectType = document.querySelector(`input[name="subjectType"][value="${course.type}"]`);
+
+    titleInput.value = course.name;
+    codeInput.value = course.code;
+    creditInput.value = course.credits;
+    priceInput.value = course.price;
+    if (subjectType) {
+        subjectType.checked = true;
+    }
+
+    course.schedule.forEach(schedule => {
+        const sectionDiv = document.createElement('div');
+        sectionDiv.classList.add('section');
+        sectionDiv.innerHTML = `
+            <label>Day:
+                <select class="day-select" required>
+                    <option value="" disabled>Select day</option>
+                    <option value="จันทร์" ${schedule.day === 'จันทร์' ? 'selected' : ''}>จันทร์</option>
+                    <option value="อังคาร" ${schedule.day === 'อังคาร' ? 'selected' : ''}>อังคาร</option>
+                    <option value="พุธ" ${schedule.day === 'พุธ' ? 'selected' : ''}>พุธ</option>
+                    <option value="พฤหัส" ${schedule.day === 'พฤหัส' ? 'selected' : ''}>พฤหัส</option>
+                    <option value="ศุกร์" ${schedule.day === 'ศุกร์' ? 'selected' : ''}>ศุกร์</option>
+                </select>
+            </label>
+            <label>Time Start:
+                <select class="start-time" required>
+                    <option value="" disabled>Select start time</option>
+                    <option value="08:30" ${schedule.time.split(' - ')[0] === '08:30' ? 'selected' : ''}>08:30</option>
+                    <option value="09:00" ${schedule.time.split(' - ')[0] === '09:00' ? 'selected' : ''}>09:00</option>
+                    <option value="11:50" ${schedule.time.split(' - ')[0] === '11:50' ? 'selected' : ''}>11:50</option>
+                    <option value="13:00" ${schedule.time.split(' - ')[0] === '13:00' ? 'selected' : ''}>13:00</option>
+                    <option value="12:50" ${schedule.time.split(' - ')[0] === '12:50' ? 'selected' : ''}>12:50</option>
+                    <option value="14:50" ${schedule.time.split(' - ')[0] === '14:50' ? 'selected' : ''}>14:50</option>
+                    <option value="15:00" ${schedule.time.split(' - ')[0] === '15:00' ? 'selected' : ''}>15:00</option>
+                    <option value="16:00" ${schedule.time.split(' - ')[0] === '16:00' ? 'selected' : ''}>16:00</option>
+                    <option value="16:50" ${schedule.time.split(' - ')[0] === '16:50' ? 'selected' : ''}>16:50</option>
+                    <option value="17:50" ${schedule.time.split(' - ')[0] === '17:50' ? 'selected' : ''}>17:50</option>
+                    <option value="18:50" ${schedule.time.split(' - ')[0] === '18:50' ? 'selected' : ''}>18:50</option>
+                </select>
+            </label>
+            <label>Time End:
+                <select class="end-time" required>
+                    <option value="" disabled>Select end time</option>
+                    <option value="08:30" ${schedule.time.split(' - ')[1] === '08:30' ? 'selected' : ''}>08:30</option>
+                    <option value="09:00" ${schedule.time.split(' - ')[1] === '09:00' ? 'selected' : ''}>09:00</option>
+                    <option value="11:50" ${schedule.time.split(' - ')[1] === '11:50' ? 'selected' : ''}>11:50</option>
+                    <option value="13:00" ${schedule.time.split(' - ')[1] === '13:00' ? 'selected' : ''}>13:00</option>
+                    <option value="12:50" ${schedule.time.split(' - ')[1] === '12:50' ? 'selected' : ''}>12:50</option>
+                    <option value="14:50" ${schedule.time.split(' - ')[1] === '14:50' ? 'selected' : ''}>14:50</option>
+                    <option value="15:00" ${schedule.time.split(' - ')[1] === '15:00' ? 'selected' : ''}>15:00</option>
+                    <option value="16:00" ${schedule.time.split(' - ')[1] === '16:00' ? 'selected' : ''}>16:00</option>
+                    <option value="16:50" ${schedule.time.split(' - ')[1] === '16:50' ? 'selected' : ''}>16:50</option>
+                    <option value="17:50" ${schedule.time.split(' - ')[1] === '17:50' ? 'selected' : ''}>17:50</option>
+                    <option value="18:50" ${schedule.time.split(' - ')[1] === '18:50' ? 'selected' : ''}>18:50</option>
+                </select>
+            </label>
+            <label>Section Number: <input type="number" class="section-number" min="1" max="100" value="${schedule.sec}" required></label>
+        `;
+        sectionsContainer.appendChild(sectionDiv);
+    });
+
+    openAddSubjectModal();
+}
+
+// Add New Section
+function addNewSection() {
+    const sectionsContainer = document.getElementById('sectionsContainer');
+    const sectionDiv = document.createElement('div');
+    sectionDiv.classList.add('section');
+    sectionDiv.innerHTML = `
+        <label>Day:
+            <select class="day-select" required>
+                <option value="" disabled selected>Select day</option>
+                <option value="จันทร์">จันทร์</option>
+                <option value="อังคาร">อังคาร</option>
+                <option value="พุธ">พุธ</option>
+                <option value="พฤหัส">พฤหัส</option>
+                <option value="ศุกร์">ศุกร์</option>
+            </select>
+        </label>
+        <label>Time Start:
+            <select class="start-time" required>
+                <option value="" disabled selected>Select start time</option>
+                <option value="08:30">08:30</option>
+                <option value="09:00">09:00</option>
+                <option value="11:50">11:50</option>
+                <option value="13:00">13:00</option>
+                <option value="12:50">12:50</option>
+                <option value="14:50">14:50</option>
+                <option value="15:00">15:00</option>
+                <option value="16:00">16:00</option>
+                <option value="16:50">16:50</option>
+                <option value="17:50">17:50</option>
+                <option value="18:50">18:50</option>
+            </select>
+        </label>
+        <label>Time End:
+            <select class="end-time" required>
+                <option value="" disabled selected>Select end time</option>
+                <option value="08:30">08:30</option>
+                <option value="09:00">09:00</option>
+                <option value="11:50">11:50</option>
+                <option value="13:00">13:00</option>
+                <option value="12:50">12:50</option>
+                <option value="14:50">14:50</option>
+                <option value="15:00">15:00</option>
+                <option value="16:00">16:00</option>
+                <option value="16:50">16:50</option>
+                <option value="17:50">17:50</option>
+                <option value="18:50">18:50</option>
+            </select>
+        </label>
+        <label>Section Number: <input type="number" class="section-number" min="1" max="100" required></label>
+    `;
+    sectionsContainer.appendChild(sectionDiv);
+}
+
+// Validate form inputs
+function validateFormInputs() {
+    const titleInput = document.getElementById('subjectTitle');
+    const codeInput = document.getElementById('subjectCode');
+    const creditInput = document.getElementById('subjectCredit');
+    const priceInput = document.getElementById('subjectPrice');
+    const sectionsContainer = document.getElementById('sectionsContainer');
+    const sections = sectionsContainer.querySelectorAll('.section');
+
+    if (!titleInput.value || !codeInput.value || !creditInput.value || !priceInput.value || sections.length === 0) {
+        alert('Please fill in all required fields.');
+        return false;
+    }
+
+    for (const section of sections) {
+        const daySelect = section.querySelector('.day-select');
+        const startTimeInput = section.querySelector('.start-time');
+        const endTimeInput = section.querySelector('.end-time');
+        const sectionNumberInput = section.querySelector('.section-number');
+
+        if (!daySelect.value || !startTimeInput.value || !endTimeInput.value || !sectionNumberInput.value) {
+            alert('Please fill in all required fields for each section.');
+            return false;
+        }
+
+        if (startTimeInput.value === endTimeInput.value) {
+            alert('Start time and end time cannot be the same.');
+            return false;
+        }
+    }
+
+    return true;
+}
+
+document.getElementById('addSectionBtn').addEventListener('click', addNewSection);
+document.getElementById('saveSubjectBtn').addEventListener('click', addNewSubject);
+document.getElementById('closeModalBtn').addEventListener('click', closeAddSubjectModal);

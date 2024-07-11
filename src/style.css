@@ -176,6 +176,143 @@ input[type="checkbox"] {
 }
 
 
+/* Updated Modal Styles */
+#addSubjectModal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  width: 60%;
+  max-width: 500px;
+  max-height: 80%;
+  overflow-y: auto;
+  position: relative;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: var(--primary-color);
+  font-size: 24px;
+  text-align: center;
+}
+
+.modal-content label {
+  display: block;
+  margin: 15px 0 5px;
+  font-weight: 600;
+  color: var(--primary-color);
+  font-family: 'Poppins', sans-serif; /* Add font-family */
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="number"],
+.modal-content input[type="time"],
+.modal-content select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  font-family: 'Poppins', sans-serif; /* Add font-family */
+}
+
+.modal-content input[type="text"]:focus,
+.modal-content input[type="number"]:focus,
+.modal-content input[type="time"]:focus,
+.modal-content select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 8px rgba(0, 121, 107, 0.2);
+  outline: none;
+}
+
+#addSectionBtn, #saveSubjectBtn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background-color: var(--primary-color);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: 'Poppins', sans-serif; /* Add font-family */
+}
+
+#addSectionBtn:hover,
+#saveSubjectBtn:hover {
+  background-color: var(--hover-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#addSectionBtn:active,
+#saveSubjectBtn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.modal-footer {
+  text-align: center;
+}
+
+.section {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  background-color: #f9f9f9;
+}
+
+.section label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: 500;
+  font-family: 'Poppins', sans-serif; /* Add font-family */
+}
+
+.radio-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.radio-group label {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
 /* Plan Selection Styles */
 .plan-selection {
   margin-top: 20px;
