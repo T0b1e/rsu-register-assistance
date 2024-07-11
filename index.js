@@ -93,7 +93,7 @@ const data = {
                 { "sec": "06", "day": "จันทร์", "time": "12:00 - 15:30" }
             ],
             "type": "ทฤษฎี",
-            "price":7200,
+            "price":4200,
             "credits": 3
         },
         {
