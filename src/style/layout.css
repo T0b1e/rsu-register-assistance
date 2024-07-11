@@ -30,5 +30,6 @@
     top: 0;
     height: 100vh; /* Full viewport height */
     box-shadow: var(--box-shadow);
+    overflow-y: hidden;
   }
   

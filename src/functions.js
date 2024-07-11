@@ -97,6 +97,16 @@ export function createCourseTable() {
                 editButton.addEventListener('click', () => editSubject(index));
                 editCell.appendChild(editButton);
                 row.appendChild(editCell);
+
+                const deleteCell = document.createElement('td');
+                deleteCell.rowSpan = course.schedule.length;
+                deleteCell.classList.add('delete-column'); // Add class to cell
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'delete-button'; // Add class to button
+                deleteButton.addEventListener('click', () => deleteSubject(index));
+                deleteCell.appendChild(deleteButton);
+                row.appendChild(deleteCell);
             }
 
             courseTableBody.appendChild(row);
@@ -498,11 +508,25 @@ function editSubject(index) {
                 </select>
             </label>
             <label>Section Number: <input type="number" class="section-number" min="1" max="100" value="${schedule.sec}" required></label>
+            <button type="button" class="delete-button delete-section">Delete Section</button>
         `;
         sectionsContainer.appendChild(sectionDiv);
+
+        // Add event listener for delete section button
+        sectionDiv.querySelector('.delete-section').addEventListener('click', () => {
+            sectionDiv.remove();
+        });
     });
 
     openAddSubjectModal();
+}
+
+// Delete subject
+function deleteSubject(index) {
+    if (confirm('Are you sure you want to delete this subject?')) {
+        data.courses.splice(index, 1);
+        createCourseTable();
+    }
 }
 
 // Add New Section
@@ -513,7 +537,7 @@ function addNewSection() {
     sectionDiv.innerHTML = `
         <label>Day:
             <select class="day-select" required>
-                <option value="" disabled selected>Select day</option>
+                <option value="" disabled>Select day</option>
                 <option value="จันทร์">จันทร์</option>
                 <option value="อังคาร">อังคาร</option>
                 <option value="พุธ">พุธ</option>
@@ -523,7 +547,7 @@ function addNewSection() {
         </label>
         <label>Time Start:
             <select class="start-time" required>
-                <option value="" disabled selected>Select start time</option>
+                <option value="" disabled>Select start time</option>
                 <option value="08:30">08:30</option>
                 <option value="09:00">09:00</option>
                 <option value="11:50">11:50</option>
@@ -539,7 +563,7 @@ function addNewSection() {
         </label>
         <label>Time End:
             <select class="end-time" required>
-                <option value="" disabled selected>Select end time</option>
+                <option value="" disabled>Select end time</option>
                 <option value="08:30">08:30</option>
                 <option value="09:00">09:00</option>
                 <option value="11:50">11:50</option>
@@ -554,9 +578,17 @@ function addNewSection() {
             </select>
         </label>
         <label>Section Number: <input type="number" class="section-number" min="1" max="100" required></label>
+        <button type="button" class="delete-button delete-section">Delete Section</button>
     `;
     sectionsContainer.appendChild(sectionDiv);
+
+    // Add event listener for delete section button
+    sectionDiv.querySelector('.delete-section').addEventListener('click', () => {
+        sectionDiv.remove();
+    });
 }
+
+
 
 // Validate form inputs
 function validateFormInputs() {
