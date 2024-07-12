@@ -40,30 +40,56 @@
     <div class="container">
         <div class="left-side">
             <div class="table-container">
-                <!-- Filter Bar 
-                <div class="filter-bar">
-                    <input type="text" id="searchInput" placeholder="Search by name or code">
-                    <div class="dropdown">
-                        <button class="dropbtn">Days</button>
-                        <div class="dropdown-content">
-                            <label><input type="checkbox" class="day-filter" value="จันทร์"> จันทร์</label>
-                            <label><input type="checkbox" class="day-filter" value="อังคาร"> อังคาร</label>
-                            <label><input type="checkbox" class="day-filter" value="พุธ"> พุธ</label>
-                            <label><input type="checkbox" class="day-filter" value="พฤหัส"> พฤหัส</label>
-                            <label><input type="checkbox" class="day-filter" value="ศุกร์"> ศุกร์</label>
+
+
+                <!-- Filters Section -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="courseSelect">Course:</label>
+                        <div class="custom-select" id="courseSelect">
+                            <div class="select-box">
+                                <select>
+                                    <option>Select Courses</option>
+                                </select>
+                                <div class="checkboxes"></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="dropdown">
-                        <button class="dropbtn">Time Range</button>
-                        <div class="dropdown-content">
-                            <label><input type="checkbox" class="time-filter" value="เช้า"> เช้า</label>
-                            <label><input type="checkbox" class="time-filter" value="บ่าย"> บ่าย</label>
-                            <label><input type="checkbox" class="time-filter" value="เย็น"> เย็น</label>
+
+                    <div class="filter-group">
+                        <label for="daySelect">Day:</label>
+                        <div class="custom-select" id="daySelect">
+                            <div class="select-box">
+                                <select>
+                                    <option>Select Days</option>
+                                </select>
+                                <div class="checkboxes">
+                                    <label><input type="checkbox" value="จันทร์"> จันทร์</label>
+                                    <label><input type="checkbox" value="อังคาร"> อังคาร</label>
+                                    <label><input type="checkbox" value="พุธ"> พุธ</label>
+                                    <label><input type="checkbox" value="พฤหัส"> พฤหัส</label>
+                                    <label><input type="checkbox" value="ศุกร์"> ศุกร์</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="timeRangeSelect">Time Range:</label>
+                        <div class="custom-select" id="timeRangeSelect">
+                            <div class="select-box">
+                                <select>
+                                    <option>Select Time Range</option>
+                                </select>
+                                <div class="checkboxes">
+                                    <label><input type="checkbox" value="เช้า"> เช้า</label>
+                                    <label><input type="checkbox" value="บ่าย"> บ่าย</label>
+                                    <label><input type="checkbox" value="เย็น"> เย็น</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                -->
-            <!-- <h1>Course Schedule</h1> -->
 
             <table id="courseTable">
                 <thead>

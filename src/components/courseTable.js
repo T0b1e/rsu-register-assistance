@@ -1,22 +1,23 @@
 // src/components/courseTable.js
-import { data, dayColors, subjectColors } from '../data.js';
+import { dayColors, subjectColors, data } from '../data.js';
 import { courseTableBody } from '../domElements.js';
 import { handleCheckboxChange } from './checkboxHandler.js';
 import { openAddSubjectModal, editSubject, deleteSubject } from './modal.js';
 
 let colorIndex = 0;
-export const subjectColorMapping = {}; // Export this to use in other files
+export const subjectColorMapping = {};
 
-export function createCourseTable() {
+export function createCourseTable(filteredCourses = null) {
+    // console.log("Creating course table with filtered courses:", filteredCourses);
     // Clear existing table content
     courseTableBody.innerHTML = '';
 
-    data.courses.forEach((course, index) => {
-        const subjectColor = subjectColors[colorIndex % subjectColors.length];
-        subjectColorMapping[course.code] = subjectColor; // Populate the mapping here
-        colorIndex++;
+    const courses = filteredCourses || data.courses;
 
-        // console.log(`Setting color for ${course.name} (${course.code}): ${subjectColor}`);
+    courses.forEach((course, index) => {
+        const subjectColor = subjectColors[colorIndex % subjectColors.length];
+        subjectColorMapping[course.code] = subjectColor;
+        colorIndex++;
 
         course.schedule.forEach((schedule, indexSchedule) => {
             const row = document.createElement('tr');
@@ -68,7 +69,6 @@ export function createCourseTable() {
             const dayCell = document.createElement('td');
             dayCell.textContent = schedule.day;
             dayCell.style.backgroundColor = dayColors[schedule.day];
-            // console.log(`Setting day color for ${schedule.day}: ${dayColors[schedule.day]}`);
             row.appendChild(dayCell);
 
             const timeCell = document.createElement('td');
