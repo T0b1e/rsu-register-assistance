@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Location</title>
+</head>
+<body>
+    <h1>Get User Location with Accuracy and Altitude</h1>
+    <button onclick="getLocation()">Get Location</button>
+    <p id="location"></p>
+
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError, {
+                    enableHighAccuracy: true
+                });
+            } else {
+                document.getElementById("location").innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showPosition(position) {
+            let lat = position.coords.latitude;
+            let lon = position.coords.longitude;
+            let accuracy = position.coords.accuracy;
+            let altitude = position.coords.altitude;
+            let altitudeAccuracy = position.coords.altitudeAccuracy;
+
+            document.getElementById("location").innerHTML = 
+                `Latitude: ${lat} <br> Longitude: ${lon} <br> Accuracy: ${accuracy} meters <br>` +
+                `Altitude: ${altitude ? altitude + " meters" : "Not available"} <br>` +
+                `Altitude Accuracy: ${altitudeAccuracy ? altitudeAccuracy + " meters" : "Not available"}`;
+        }
+
+        function showError(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    document.getElementById("location").innerHTML = "User denied the request for Geolocation."
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    document.getElementById("location").innerHTML = "Location information is unavailable."
+                    break;
+                case error.TIMEOUT:
+                    document.getElementById("location").innerHTML = "The request to get user location timed out."
+                    break;
+                case error.UNKNOWN_ERROR:
+                    document.getElementById("location").innerHTML = "An unknown error occurred."
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
