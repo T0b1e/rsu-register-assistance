@@ -1,6 +1,9 @@
 /ev
 /node_modules
 
+/enroll-app
+/enroll-bun
+
 /index-backup.js
 /src/components/
 /classes.json
